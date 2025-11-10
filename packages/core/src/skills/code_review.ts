@@ -1,5 +1,6 @@
 import { z } from "zod";
-import type { VibeSkillContext } from "@vibe/shared";
+import type { VibeSkillContext } from "@devflow-modules/vibe-shared";
+
 
 const ReviewSchema = z.object({
     summary: z.string(),

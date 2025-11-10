@@ -1,4 +1,4 @@
-import type { VibeSkillContext } from "@vibe/shared";
+import type { VibeSkillContext } from "@devflow-modules/vibe-shared";
 import * as CodeReview from "./code_review";
 
 export type SkillName = "review" | "tests" | "docs";
