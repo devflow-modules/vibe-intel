@@ -1,10 +1,8 @@
 #!/usr/bin/env node
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const commander_1 = require("commander");
-const agent_1 = require("../agent/agent");
-const context_1 = require("../agent/context");
-const program = new commander_1.Command();
+import { Command } from "commander";
+import { runTask } from "../agent/agent";
+import { loadFiles } from "../agent/context";
+const program = new Command();
 program
     .name("vibe")
     .description("Dev Intelligence CLI")
@@ -14,8 +12,8 @@ program
     .argument("<glob>", "arquivos ou pasta (ex: 'src/**/*.ts')")
     .action(async (glob) => {
     try {
-        const files = await (0, context_1.loadFiles)(glob);
-        const out = await (0, agent_1.runTask)({ goal: "review", files });
+        const files = await loadFiles(glob);
+        const out = await runTask({ goal: "review", files });
         // saída JSON bonita
         // eslint-disable-next-line no-console
         console.log(JSON.stringify(out, null, 2));
@@ -29,8 +27,8 @@ program
     .command("tests")
     .argument("<glob>", "arquivos ou pasta")
     .action(async (glob) => {
-    const files = await (0, context_1.loadFiles)(glob);
-    const out = await (0, agent_1.runTask)({ goal: "tests", files });
+    const files = await loadFiles(glob);
+    const out = await runTask({ goal: "tests", files });
     console.log(JSON.stringify(out, null, 2));
 });
 program.parse();

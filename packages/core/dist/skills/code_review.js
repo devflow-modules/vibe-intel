@@ -1,19 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.execute = execute;
-const zod_1 = require("zod");
-const ReviewSchema = zod_1.z.object({
-    summary: zod_1.z.string(),
-    issues: zod_1.z.array(zod_1.z.object({
-        file: zod_1.z.string(),
-        line: zod_1.z.number().optional(),
-        type: zod_1.z.enum(["bug", "perf", "security", "style"]),
-        reason: zod_1.z.string(),
-        fix: zod_1.z.string()
+import { z } from "zod";
+const ReviewSchema = z.object({
+    summary: z.string(),
+    issues: z.array(z.object({
+        file: z.string(),
+        line: z.number().optional(),
+        type: z.enum(["bug", "perf", "security", "style"]),
+        reason: z.string(),
+        fix: z.string()
     })),
-    risk: zod_1.z.enum(["low", "medium", "high"])
+    risk: z.enum(["low", "medium", "high"])
 });
-async function execute({ ai, input }) {
+export async function execute({ ai, input }) {
     const messages = [
         {
             role: "system",
