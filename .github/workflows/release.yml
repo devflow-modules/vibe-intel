@@ -48,7 +48,4 @@ jobs:
       - name: Release monorepo packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: >
-          npx semantic-release
-          --extends semantic-release-monorepo
-          --tag-format '\${name}@\${version}'
+        run: npx semantic-release --extends semantic-release-monorepo
