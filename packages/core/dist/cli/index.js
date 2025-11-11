@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
-import { runTask } from "../agent/agent";
-import { loadFiles } from "../agent/context";
+import { runTask } from "../agent/agent.js";
+import { loadFiles } from "../agent/context.js";
 const program = new Command();
 program
     .name("vibe")

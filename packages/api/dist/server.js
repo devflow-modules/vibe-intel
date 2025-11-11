@@ -1,9 +1,9 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
-import { registerAuth } from "./lib/auth";
-import { registerRateLimit } from "./lib/rate";
-import { registerHealthRoute } from "./routes/v1/health";
-import { registerTasksRoute } from "./routes/v1/tasks";
+import { registerAuth } from "./lib/auth.js";
+import { registerRateLimit } from "./lib/rate.js";
+import { registerHealthRoute } from "./routes/v1/health.js";
+import { registerTasksRoute } from "./routes/v1/tasks.js";
 dotenv.config();
 async function startServer() {
     const fastify = Fastify({ logger: true });

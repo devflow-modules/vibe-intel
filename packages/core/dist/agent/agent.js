@@ -1,9 +1,9 @@
 import { ai } from "@devflow-modules/vibe-shared";
-import { detectIntent } from "./intent";
-import { skills } from "../skills";
+import { detectIntent } from "./intent.js";
+import * as skills from "../skills/index.js";
 export async function runTask(input) {
     const intent = await detectIntent(input);
-    const skill = skills[intent] ?? skills.review;
-    const result = await skill({ ai, input });
-    return { intent, result };
+    const fallbackSkill = skills["default"] || Object.values(skills)[0];
+    const skill = skills[intent] ?? fallbackSkill;
+    return await skill.execute({ ai, input });
 }

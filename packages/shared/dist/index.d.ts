@@ -1,2 +1,2 @@
-export * from "./aiClient";
-export * from "./types";
+export * from "./aiClient.js";
+export * from "./types.js";

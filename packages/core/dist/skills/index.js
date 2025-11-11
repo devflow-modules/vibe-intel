@@ -1,4 +1,4 @@
-import * as CodeReview from "./code_review";
+import * as CodeReview from "./code_review.js";
 export const skills = {
     review: CodeReview.execute,
     tests: async (ctx) => {

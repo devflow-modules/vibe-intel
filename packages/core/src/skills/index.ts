@@ -1,5 +1,5 @@
 import type { VibeSkillContext } from "@devflow-modules/vibe-shared";
-import * as CodeReview from "./code_review";
+import * as CodeReview from "./code_review.js";
 
 export type SkillName = "review" | "tests" | "docs";
 

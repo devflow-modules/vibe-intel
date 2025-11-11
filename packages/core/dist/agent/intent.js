@@ -1,5 +1,6 @@
 export async function detectIntent(input) {
-    if (input.goal === "tests" || input.goal === "docs")
+    if (["review", "tests", "docs"].includes(input.goal)) {
         return input.goal;
-    return "review";
+    }
+    return "default";
 }
