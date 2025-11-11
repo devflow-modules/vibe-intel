@@ -13,12 +13,18 @@
         "dev:ui": "pnpm --filter @devflow-modules/vibe-ui dev"
     },
     "devDependencies": {
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/commit-analyzer": "^13.0.1",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/npm": "^13.1.1",
+        "@semantic-release/release-notes-generator": "^14.1.0",
         "@types/dotenv": "^8.2.3",
         "@types/node": "^24.10.0",
         "commitizen": "^4.3.1",
         "cz-conventional-changelog": "^3.3.0",
         "eslint": "^9.0.0",
         "prettier": "^3.0.0",
+        "semantic-release": "^25.0.2",
         "turbo": "^2.0.0",
         "typescript": "^5.9.3"
     },

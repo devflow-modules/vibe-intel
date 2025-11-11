@@ -5,27 +5,30 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
         with:
-          version: 10.21.0
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.21.0
 
       - name: Cache pnpm store
         uses: actions/cache@v4
@@ -41,9 +44,8 @@ jobs:
       - name: Build packages
         run: pnpm build
 
-      - name: Publish packages to npm
+      - name: Release packages via semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd packages/shared && npm publish --access public || true
-          cd ../core && npm publish --access public || true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
