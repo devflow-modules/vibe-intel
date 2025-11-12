@@ -45,7 +45,6 @@ turbo
 Thumbs.db
 
 # Reports / Logs
-reports/
 logs/
 *.log
 *.out
