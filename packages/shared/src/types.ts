@@ -1,3 +1,4 @@
+// ==================== BASE ====================
 export type VibeModel = "gpt-4o-mini" | "gpt-4o" | "gpt-4-turbo";
 
 export interface VibeAIMessage {
@@ -10,8 +11,8 @@ export interface VibeAIRequest {
   messages: VibeAIMessage[];
   temperature?: number;
   maxTokens?: number;
-  skill?: string;      
-  env?: string;        
+  skill?: string;
+  env?: string;
 }
 
 export interface VibeAIResponse {
@@ -19,10 +20,7 @@ export interface VibeAIResponse {
   content: string;
 }
 
-/**
- * Evento de telemetria no estilo MCP:
- * registra início/fim/erro de uma execução de ferramenta.
- */
+// ==================== TELEMETRIA ====================
 export interface VibeTelemetryEvent {
   type: "start" | "finish" | "error";
   skill: string;
@@ -41,8 +39,37 @@ export interface VibeSkillContext {
   };
 }
 
-export interface VibeRunInput<TPayload = unknown> {
-  skill: string;
-  payload: TPayload;
+// ==================== SKILL MAP CENTRAL ====================
+
+/**
+ * Mapa base de skills.
+ * Cada pacote (ex: vibe-core) pode estender esse mapa via `declare module`.
+ * Exemplo:
+ * declare module "@devflow-modules/vibe-shared" {
+ *   interface SkillMapBase {
+ *     code_review: { input: CodeReviewInput; output: CodeReviewResult };
+ *   }
+ * }
+ */
+export interface SkillMapBase {}
+
+/**
+ * Mapa completo de skills disponíveis (depois da extensão).
+ */
+export type SkillMap = SkillMapBase;
+
+/**
+ * Entrada genérica para execução de uma skill.
+ * O tipo de payload e output é inferido automaticamente do SkillMap.
+ */
+export interface VibeRunInput<K extends keyof SkillMap = keyof SkillMap> {
+  skill: K;
+  payload: SkillMap[K]["input"];
   context: VibeSkillContext;
 }
+
+/**
+ * Saída genérica de execução de uma skill.
+ * Inferido automaticamente com base na skill passada.
+ */
+export type VibeRunOutput<K extends keyof SkillMap> = SkillMap[K]["output"];

@@ -1,35 +1,51 @@
 import * as path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-// Corrige caminho absoluto da raiz (funciona em Windows)
+import OpenAI from "openai";
+// =========================
+// 🌱 Carrega variáveis de ambiente
+// =========================
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const envPath = path.resolve(__dirname, "../../../.env.local");
 dotenv.config({ path: envPath });
-import OpenAI from "openai";
 if (!process.env.OPENAI_API_KEY) {
     console.error(`❌ OPENAI_API_KEY não encontrada.
 Verifique o arquivo .env.local na raiz (${envPath})`);
     process.exit(1);
 }
+// =========================
+// 🤖 Cliente OpenAI
+// =========================
 const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
+// =========================
+// 🧠 Função principal com tipagem genérica
+// =========================
+/**
+ * Executa uma chamada ao modelo OpenAI com tipagem segura.
+ * Tenta parsear o retorno em JSON para tipo <T>, se possível.
+ */
 export async function ai(request) {
     const completion = await client.chat.completions.create({
         model: request.model ?? "gpt-4o-mini",
         messages: request.messages,
         temperature: request.temperature ?? 0.2,
         max_tokens: request.maxTokens ?? 2000,
-        metadata: {
-            source: "vibe-intel/aiClient",
-            skill: request.skill ?? "unknown",
-            env: request.env ?? "unknown",
-        },
+        // ⚠️ Não enviar metadata (gera erro 400 se 'store' não estiver ativo)
     });
-    const content = completion.choices[0]?.message?.content ?? "";
+    const content = completion.choices?.[0]?.message?.content ?? "";
+    let parsed;
+    try {
+        parsed = JSON.parse(content);
+    }
+    catch {
+        // conteúdo não é JSON — ignora
+    }
     return {
         raw: completion,
         content,
+        parsed,
     };
 }
 //# sourceMappingURL=aiClient.js.map
