@@ -178,67 +178,87 @@ async function updateSprintDuration(sprintNumber: number, branch: string) {
 }
 
 /* ---------------------------------------------------------
- * 💬 Criar rascunho de post no Notion → LinkedIn
+ * 💬 Criar rascunho de post no Notion → LinkedIn (Vibe Intel Style)
  * --------------------------------------------------------- */
 
 async function createLinkedInPost(sprintNumber: number) {
-    const pageId = SPRINT_PAGES[sprintNumber];
-    if (!pageId || !LINKEDIN_DB_ID) return;
+  const pageId = SPRINT_PAGES[sprintNumber];
+  if (!pageId || !LINKEDIN_DB_ID) return;
 
-    try {
-        const sprint = await notion.pages.retrieve({ page_id: pageId });
-        const sprintName =
-            (sprint as any).properties?.Sprint?.title?.[0]?.plain_text ||
-            `Sprint ${sprintNumber}`;
-        const objetivo =
-            (sprint as any).properties?.["Objetivo Principal"]?.rich_text?.[0]
-                ?.plain_text || "";
+  try {
+    const sprint = await notion.pages.retrieve({ page_id: pageId });
 
-        const commits = await getSprintCommits(`sprint/${sprintNumber}-*`);
-        const highlights = commits.slice(0, 3).join("\n");
+    const sprintName =
+      (sprint as any).properties?.Sprint?.title?.[0]?.plain_text ||
+      `Sprint ${sprintNumber}`;
+    const objetivo =
+      (sprint as any).properties?.["Objetivo Principal"]?.rich_text?.[0]
+        ?.plain_text || "";
 
-        const content = `✅ Sprint ${sprintNumber} concluída!
-            ${objetivo ? `${objetivo}\n\n` : ""}
-            **Principais entregas:**
-            ${highlights}
-            #BuildInPublic #TypeScript #SoftwareEngineering`;
+    const commits = await getSprintCommits(`sprint/${sprintNumber}-*`);
+    const highlights = commits.slice(0, 3).join("\n");
 
-        await notion.pages.create({
-            parent: { database_id: LINKEDIN_DB_ID },
-            properties: {
-                Post: {
-                    title: [{ text: { content: `✅ Sprint ${sprintNumber}: ${sprintName}` } }],
-                },
-                Tipo: {
-                    select: { name: "Milestone" },
-                },
-                Status: {
-                    status: { name: "Rascunho" },
-                },
-                "Data Publicação": {
-                    date: { start: new Date().toISOString().split("T")[0] },
-                },
-                "Sprint Relacionada": {
-                    relation: [{ id: pageId }],
-                },
+    const content = `🚀 **Sprint ${sprintNumber} concluída com sucesso!**
+
+🧭 *Objetivo Principal:* ${objetivo || "—"}
+
+📦 *Principais entregas:*
+${highlights || "Nenhum commit registrado."}
+
+💡 *Insights:* Cada sprint é um passo para deixar o Vibe Intel ainda mais inteligente, automatizado e escalável.
+
+#VibeIntel #BuildInPublic #TypeScript #AI #DevTools #Automation #SoftwareEngineering`;
+
+    await notion.pages.create({
+      parent: { database_id: LINKEDIN_DB_ID },
+      properties: {
+        Post: {
+          title: [
+            {
+              text: {
+                content: `✅ Sprint ${sprintNumber}: ${sprintName}`,
+              },
             },
-            children: [
-                {
-                    object: "block",
-                    type: "paragraph",
-                    paragraph: {
-                        rich_text: [{ type: "text", text: { content } }],
-                    },
-                },
-            ],
-        });
+          ],
+        },
+        Tipo: {
+          select: { name: "Milestone" },
+        },
+        Status: {
+          status: { name: "Rascunho" },
+        },
+        "Data Publicação": {
+          date: { start: new Date().toISOString().split("T")[0] },
+        },
+        "Sprint Relacionada": {
+          relation: [{ id: pageId }],
+        },
+        Hashtags: {
+          multi_select: [
+            { name: "VibeIntel" },
+            { name: "BuildInPublic" },
+            { name: "AI" },
+            { name: "Automation" },
+            { name: "SoftwareEngineering" },
+          ],
+        },
+      },
+      children: [
+        {
+          object: "block",
+          type: "paragraph",
+          paragraph: {
+            rich_text: [{ type: "text", text: { content } }],
+          },
+        },
+      ],
+    });
 
-        console.log(`📱 Post LinkedIn criado como RASCUNHO (Sprint ${sprintNumber})`);
-    } catch (err) {
-        console.error("❌ Erro ao criar post LinkedIn:", (err as Error).message);
-    }
+    console.log(`📱 Post LinkedIn (Vibe Intel) criado como RASCUNHO para Sprint ${sprintNumber}`);
+  } catch (err) {
+    console.error("❌ Erro ao criar post LinkedIn:", (err as Error).message);
+  }
 }
-
 
 /* ---------------------------------------------------------
  * 🚀 Execução principal
