@@ -1,14 +1,15 @@
 import * as path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import OpenAI from "openai";
+import type { VibeAIRequest, VibeAIResponse } from "./types.js";
 
-// Corrige caminho absoluto da raiz (funciona em Windows)
+// =========================
+// 🌱 Carrega variáveis de ambiente
+// =========================
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const envPath = path.resolve(__dirname, "../../../.env.local");
 dotenv.config({ path: envPath });
-
-import OpenAI from "openai";
-import type { VibeAIRequest, VibeAIResponse } from "./types.js";
 
 if (!process.env.OPENAI_API_KEY) {
   console.error(`❌ OPENAI_API_KEY não encontrada.
@@ -16,27 +17,43 @@ Verifique o arquivo .env.local na raiz (${envPath})`);
   process.exit(1);
 }
 
+// =========================
+// 🤖 Cliente OpenAI
+// =========================
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function ai(request: VibeAIRequest): Promise<VibeAIResponse> {
+// =========================
+// 🧠 Função principal com tipagem genérica
+// =========================
+/**
+ * Executa uma chamada ao modelo OpenAI com tipagem segura.
+ * Tenta parsear o retorno em JSON para tipo <T>, se possível.
+ */
+export async function ai<T = unknown>(
+  request: VibeAIRequest
+): Promise<VibeAIResponse & { parsed?: T }> {
   const completion = await client.chat.completions.create({
     model: request.model ?? "gpt-4o-mini",
     messages: request.messages,
     temperature: request.temperature ?? 0.2,
     max_tokens: request.maxTokens ?? 2000,
-    metadata: {
-      source: "vibe-intel/aiClient",
-      skill: request.skill ?? "unknown",
-      env: request.env ?? "unknown",
-    },
+    // ⚠️ Não enviar metadata (gera erro 400 se 'store' não estiver ativo)
   });
 
-  const content = completion.choices[0]?.message?.content ?? "";
+  const content = completion.choices?.[0]?.message?.content ?? "";
+  let parsed: T | undefined;
+
+  try {
+    parsed = JSON.parse(content) as T;
+  } catch {
+    // conteúdo não é JSON — ignora
+  }
 
   return {
     raw: completion,
     content,
+    parsed,
   };
 }

@@ -1,13 +1,18 @@
 import type { VibeRunInput } from "@devflow-modules/vibe-shared";
 import { getSkill } from "../skills/index.js";
+import type { SkillMap } from "../skills/index.js";
 
-export async function runAgent(input: VibeRunInput): Promise<unknown> {
-  const skill = getSkill(input.skill);
+/**
+ * Executa skill com tipagem inferida.
+ */
+export async function runAgent<K extends keyof SkillMap>(
+  input: VibeRunInput<K>
+): Promise<SkillMap[K]["output"]> {
+  const skill = getSkill(input.skill as K);
 
-  // opcional: evento high-level de agent
   input.context.telemetry?.onEvent?.({
     type: "start",
-    skill: input.skill,
+    skill: String(input.skill),
     payload: input.payload,
     timestamp: new Date().toISOString(),
   });
@@ -16,7 +21,7 @@ export async function runAgent(input: VibeRunInput): Promise<unknown> {
 
   input.context.telemetry?.onEvent?.({
     type: "finish",
-    skill: input.skill,
+    skill: String(input.skill),
     result,
     timestamp: new Date().toISOString(),
   });

@@ -2,23 +2,27 @@ import { z } from "zod";
 import { ai } from "@devflow-modules/vibe-shared";
 import type { VibeSkillContext } from "@devflow-modules/vibe-shared";
 
+// Estrutura de cada arquivo avaliado
 const FileSchema = z.object({
   path: z.string(),
   content: z.string(),
 });
 
+// Entrada esperada da skill (sem defaults, obrigatória)
 export const CodeReviewInputSchema = z.object({
-  files: z.array(FileSchema).min(1),
-  language: z.string().default("typescript"),
+  files: z.array(FileSchema).min(1, "Deve haver pelo menos um arquivo"),
+  language: z.enum(["typescript", "javascript", "python", "java", "csharp"]),
   framework: z.string().optional(),
-  focus: z
-    .array(
-      z.enum(["bugs", "style", "performance", "security", "architecture"]),
-    )
-    .default(["bugs", "style", "architecture"]),
-});
+  focus: z.array(
+    z.enum(["bugs", "style", "performance", "security", "architecture"])
+  ),
+})
 
-export type CodeReviewInput = z.infer<typeof CodeReviewInputSchema>;
+/**
+ * ✅ Tipo inferido *após* defaults do Zod.
+ * Agora `language` e `focus` são opcionais também no TypeScript.
+ */
+export type CodeReviewInput = z.output<typeof CodeReviewInputSchema>;
 
 export interface CodeReviewFinding {
   file: string;
@@ -37,9 +41,13 @@ export interface CodeReviewResult {
   };
 }
 
+/**
+ * 🔍 Skill principal de revisão de código
+ * Analisa os arquivos recebidos e retorna um relatório técnico
+ */
 export async function runCodeReview(
-  payload: unknown,
-  ctx: VibeSkillContext,
+  payload: CodeReviewInput,
+  ctx: VibeSkillContext
 ): Promise<CodeReviewResult> {
   const input = CodeReviewInputSchema.parse(payload);
 

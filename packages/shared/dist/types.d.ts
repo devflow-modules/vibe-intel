@@ -15,10 +15,6 @@ export interface VibeAIResponse {
     raw: unknown;
     content: string;
 }
-/**
- * Evento de telemetria no estilo MCP:
- * registra início/fim/erro de uma execução de ferramenta.
- */
 export interface VibeTelemetryEvent {
     type: "start" | "finish" | "error";
     skill: string;
@@ -35,8 +31,14 @@ export interface VibeSkillContext {
         onEvent?(event: VibeTelemetryEvent): void;
     };
 }
-export interface VibeRunInput<TPayload = unknown> {
-    skill: string;
-    payload: TPayload;
+export interface SkillMapBase {
+}
+/**
+ * Entrada genérica para execução de uma skill.
+ * O tipo de payload e output é inferido automaticamente do SkillMapBase.
+ */
+export interface VibeRunInput<K extends keyof SkillMapBase = keyof SkillMapBase> {
+    skill: K;
+    payload: SkillMapBase[K]["input"];
     context: VibeSkillContext;
 }

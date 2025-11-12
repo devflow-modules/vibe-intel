@@ -10,6 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 dotenv.config();
+dotenv.config({ path: ".env.local" });
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const SPRINT_DB_ID = process.env.NOTION_SPRINT_DB_ID || "";
