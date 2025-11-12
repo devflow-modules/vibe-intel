@@ -21,14 +21,14 @@ const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
 // IDs das páginas Notion (via .env ou hardcoded)
 function normalizeNotionIds(envValue?: string): Record<number, string> {
-  if (!envValue) return {};
-  const parsed = JSON.parse(envValue);
-  const normalized: Record<number, string> = {};
-  for (const [key, value] of Object.entries(parsed)) {
-    // remove hífens para compatibilidade com a API do Notion
-    normalized[Number(key)] = (value as string).replace(/-/g, "");
-  }
-  return normalized;
+    if (!envValue) return {};
+    const parsed = JSON.parse(envValue);
+    const normalized: Record<number, string> = {};
+    for (const [key, value] of Object.entries(parsed)) {
+        // remove hífens para compatibilidade com a API do Notion
+        normalized[Number(key)] = (value as string).replace(/-/g, "");
+    }
+    return normalized;
 }
 
 const SPRINT_PAGES = normalizeNotionIds(process.env.NOTION_SPRINT_IDS);
@@ -40,27 +40,27 @@ const LINKEDIN_DB_ID = process.env.NOTION_LINKEDIN_DB_ID || "";
 
 // Detecta número da sprint pela branch
 function getSprintFromBranch(branch?: string): number | null {
-  if (!branch) return null;
-  const match = branch.match(/sprint\/(\d+)/);
-  return match ? parseInt(match[1], 10) : null;
+    if (!branch) return null;
+    const match = branch.match(/sprint\/(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
 }
 
 // Atualiza status Notion
 async function updateSprintStatus(sprintNumber: number, status: string) {
-  const pageId = SPRINT_PAGES[sprintNumber];
-  if (!pageId) return console.warn(`⚠️ Sprint ${sprintNumber} não mapeada`);
+    const pageId = SPRINT_PAGES[sprintNumber];
+    if (!pageId) return console.warn(`⚠️ Sprint ${sprintNumber} não mapeada`);
 
-  try {
-    await notion.pages.update({
-      page_id: pageId,
-      properties: {
-        Status: { status: { name: status } },
-      },
-    });
-    console.log(`✅ Sprint ${sprintNumber} → Status atualizado: ${status}`);
-  } catch (error: any) {
-    console.error(`❌ Erro ao atualizar status:`, error.message);
-  }
+    try {
+        await notion.pages.update({
+            page_id: pageId,
+            properties: {
+                Status: { status: { name: status } },
+            },
+        });
+        console.log(`✅ Sprint ${sprintNumber} → Status atualizado: ${status}`);
+    } catch (error: any) {
+        console.error(`❌ Erro ao atualizar status:`, error.message);
+    }
 }
 
 /* ---------------------------------------------------------
@@ -68,60 +68,60 @@ async function updateSprintStatus(sprintNumber: number, status: string) {
  * --------------------------------------------------------- */
 
 async function getSprintCommits(branch: string): Promise<string[]> {
-  try {
-    // garante que a main esteja disponível no ambiente CI
-    await git.fetch(["origin", "main", "--depth=1"]);
+    try {
+        // garante que a main esteja disponível no ambiente CI
+        await git.fetch(["origin", "main", "--depth=5"]).catch(() => {});
+        
+        const log = await git.log({ from: "origin/main", to: branch }).catch(() => ({ all: [] }));
+        const commits = log.all.map((c: { message: string }) => c.message).filter(Boolean);
 
-    const log = await git.log({ from: "main", to: branch });
-    const commits = log.all.map((c: { message: string }) => c.message).filter(Boolean);
-
-    return commits.map((msg: string) => {
-      const match = msg.match(/^(\w+)(?:\([\w-]+\))?: (.+)$/);
-      if (match) {
-        const [, type, desc] = match;
-        const emojiMap: Record<string, string> = {
-          feat: "✨",
-          fix: "🐛",
-          docs: "📝",
-          test: "🧪",
-          refactor: "♻️",
-          chore: "🔧",
-        };
-        const emoji = emojiMap[type] || "•";
-        return `${emoji} ${desc}`;
-      }
-      return `• ${msg}`;
-    });
-  } catch (err) {
-    console.error("Erro ao buscar commits:", (err as Error).message);
-    return [];
-  }
+        return commits.map((msg: string) => {
+            const match = msg.match(/^(\w+)(?:\([\w-]+\))?: (.+)$/);
+            if (match) {
+                const [, type, desc] = match;
+                const emojiMap: Record<string, string> = {
+                    feat: "✨",
+                    fix: "🐛",
+                    docs: "📝",
+                    test: "🧪",
+                    refactor: "♻️",
+                    chore: "🔧",
+                };
+                const emoji = emojiMap[type] || "•";
+                return `${emoji} ${desc}`;
+            }
+            return `• ${msg}`;
+        });
+    } catch (err) {
+        console.error("Erro ao buscar commits:", (err as Error).message);
+        return [];
+    }
 }
 
 async function updateSprintDeliverables(sprintNumber: number, branch: string) {
-  const pageId = SPRINT_PAGES[sprintNumber];
-  const commits = await getSprintCommits(branch);
-  if (!pageId || commits.length === 0) return;
+    const pageId = SPRINT_PAGES[sprintNumber];
+    const commits = await getSprintCommits(branch);
+    if (!pageId || commits.length === 0) return;
 
-  const deliverables = commits.slice(0, 20).join("\n");
-  try {
-    await notion.pages.update({
-      page_id: pageId,
-      properties: {
-        Entregáveis: {
-          rich_text: [
-            {
-              type: "text",
-              text: { content: deliverables },
+    const deliverables = commits.slice(0, 20).join("\n");
+    try {
+        await notion.pages.update({
+            page_id: pageId,
+            properties: {
+                Entregáveis: {
+                    rich_text: [
+                        {
+                            type: "text",
+                            text: { content: deliverables },
+                        },
+                    ],
+                },
             },
-          ],
-        },
-      },
-    });
-    console.log(`📝 Entregáveis atualizados: ${commits.length} commits`);
-  } catch (error: any) {
-    console.error("❌ Erro ao atualizar entregáveis:", error.message);
-  }
+        });
+        console.log(`📝 Entregáveis atualizados: ${commits.length} commits`);
+    } catch (error: any) {
+        console.error("❌ Erro ao atualizar entregáveis:", error.message);
+    }
 }
 
 /* ---------------------------------------------------------
@@ -129,52 +129,52 @@ async function updateSprintDeliverables(sprintNumber: number, branch: string) {
  * --------------------------------------------------------- */
 
 async function calculateSprintTime(branch: string) {
-  try {
-    const firstCommit = (
-      await git.raw(["log", branch, "--reverse", "--format=%ct", "--max-count=1"])
-    ).trim();
+    try {
+        const firstCommit = (
+            await git.raw(["log", branch, "--reverse", "--format=%ct", "--max-count=1"])
+        ).trim();
 
-    const lastCommit = (
-      await git.raw(["log", branch, "--format=%ct", "--max-count=1"])
-    ).trim();
+        const lastCommit = (
+            await git.raw(["log", branch, "--format=%ct", "--max-count=1"])
+        ).trim();
 
-    if (!firstCommit || !lastCommit) return null;
+        if (!firstCommit || !lastCommit) return null;
 
-    const start = new Date(parseInt(firstCommit) * 1000);
-    const end = new Date(parseInt(lastCommit) * 1000);
-    const diffMs = end.getTime() - start.getTime();
+        const start = new Date(parseInt(firstCommit) * 1000);
+        const end = new Date(parseInt(lastCommit) * 1000);
+        const diffMs = end.getTime() - start.getTime();
 
-    return {
-      days: Math.floor(diffMs / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diffMs / (1000 * 60 * 60)) % 24),
-      start,
-      end,
-    };
-  } catch {
-    return null;
-  }
+        return {
+            days: Math.floor(diffMs / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((diffMs / (1000 * 60 * 60)) % 24),
+            start,
+            end,
+        };
+    } catch {
+        return null;
+    }
 }
 
 async function updateSprintDuration(sprintNumber: number, branch: string) {
-  const pageId = SPRINT_PAGES[sprintNumber];
-  if (!pageId) return;
-  const time = await calculateSprintTime(branch);
-  if (!time) return;
+    const pageId = SPRINT_PAGES[sprintNumber];
+    if (!pageId) return;
+    const time = await calculateSprintTime(branch);
+    if (!time) return;
 
-  const totalDays = time.days + time.hours / 24;
-  try {
-    await notion.pages.update({
-      page_id: pageId,
-      properties: {
-        "Duração (dias)": {
-          number: Math.round(totalDays * 10) / 10,
-        },
-      },
-    });
-    console.log(`⏱️ Duração atualizada: ${time.days}d ${time.hours}h`);
-  } catch (error: any) {
-    console.error("❌ Erro ao atualizar duração:", error.message);
-  }
+    const totalDays = time.days + time.hours / 24;
+    try {
+        await notion.pages.update({
+            page_id: pageId,
+            properties: {
+                "Duração (dias)": {
+                    number: Math.round(totalDays * 10) / 10,
+                },
+            },
+        });
+        console.log(`⏱️ Duração atualizada: ${time.days}d ${time.hours}h`);
+    } catch (error: any) {
+        console.error("❌ Erro ao atualizar duração:", error.message);
+    }
 }
 
 /* ---------------------------------------------------------
@@ -187,25 +187,25 @@ const prMerged = process.env.PR_MERGED === "true";
 const sprintNumber = getSprintFromBranch(branch);
 
 if (!sprintNumber) {
-  console.log("ℹ️ Nenhuma sprint detectada na branch");
-  process.exit(0);
+    console.log("ℹ️ Nenhuma sprint detectada na branch");
+    process.exit(0);
 }
 
 (async () => {
-  try {
-    if (eventName === "push") {
-      await updateSprintStatus(sprintNumber, "Em Desenvolvimento");
-      await updateSprintDeliverables(sprintNumber, branch);
-    } else if (eventName === "pull_request") {
-      if (prMerged) {
-        await updateSprintStatus(sprintNumber, "Concluído");
-        await updateSprintDuration(sprintNumber, branch);
-      } else {
-        await updateSprintStatus(sprintNumber, "Testando");
-      }
+    try {
+        if (eventName === "push") {
+            await updateSprintStatus(sprintNumber, "Em Desenvolvimento");
+            await updateSprintDeliverables(sprintNumber, branch);
+        } else if (eventName === "pull_request") {
+            if (prMerged) {
+                await updateSprintStatus(sprintNumber, "Concluído");
+                await updateSprintDuration(sprintNumber, branch);
+            } else {
+                await updateSprintStatus(sprintNumber, "Testando");
+            }
+        }
+    } catch (error: any) {
+        console.error("❌ Erro geral:", error.message);
+        process.exit(1);
     }
-  } catch (error: any) {
-    console.error("❌ Erro geral:", error.message);
-    process.exit(1);
-  }
 })();
