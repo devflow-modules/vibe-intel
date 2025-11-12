@@ -2,7 +2,7 @@ name: 📊 Relatório Semanal
 
 on:
   schedule:
-    - cron: "0 9 * * 1" # Toda segunda às 9h
+    - cron: "0 9 * * 1" # Segunda 9h
   workflow_dispatch:
 
 jobs:
@@ -13,31 +13,27 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      # 1️⃣ Instalar PNPM global ANTES de qualquer uso
-      - name: 🧩 Instalar PNPM globalmente
+      # 1️⃣ Instalar Node 22 e PNPM manualmente (sem setup-node)
+      - name: 🧰 Instalar Node e PNPM
         run: |
+          curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+          sudo apt-get install -y nodejs
           npm install -g pnpm@10
-          echo "✅ PNPM instalado com sucesso:"
-          pnpm -v
+          echo "✅ Node:" $(node -v)
+          echo "✅ PNPM:" $(pnpm -v)
 
-      # 2️⃣ Configurar Node.js
-      - name: 🧰 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      # 3️⃣ Instalar dependências
+      # 2️⃣ Instalar dependências
       - name: 📦 Instalar dependências
         run: pnpm install --no-frozen-lockfile
 
-      # 4️⃣ Executar script de relatório
+      # 3️⃣ Executar relatório semanal
       - name: 🧠 Gerar Relatório Semanal (Notion)
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_SPRINT_DB_ID: ${{ secrets.NOTION_SPRINT_DB_ID }}
         run: npx tsx scripts/weekly-report.ts
 
-      # 5️⃣ Commit automático
+      # 4️⃣ Commitar relatório se gerado
       - name: 💾 Commit Report
         run: |
           git config user.name "github-actions"
