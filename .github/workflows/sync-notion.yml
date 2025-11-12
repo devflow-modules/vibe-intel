@@ -39,4 +39,4 @@ jobs:
           GITHUB_REF_NAME: ${{ github.ref_name }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           PR_MERGED: ${{ github.event.pull_request.merged }}
-        run: pnpm tsx scripts/sync-notion.ts
+        run: npx tsx scripts/sync-notion.ts
