@@ -8,21 +8,31 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./*": "./dist/*"
   },
   "files": ["dist"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "pnpm build"
+    "clean": "rimraf dist",
+    "prepublishOnly": "pnpm build",
+    "dev": "tsc --watch --preserveWatchOutput"
   },
   "dependencies": {
+    "pino": "^10.1.0",
+    "pino-pretty": "^13.1.2",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-node": "^0.208.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.67.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.208.0",
+    "std-env": "^3.10.0",
     "dotenv": "^16.6.1",
-    "openai": "^4.104.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "rimraf": "^6.0.1"
   },
   "publishConfig": {
     "access": "public",

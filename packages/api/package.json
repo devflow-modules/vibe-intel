@@ -5,9 +5,10 @@
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
   "scripts": {
-    "dev": "tsx -r dotenv/config -r tsconfig-paths/register src/server.ts",
     "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "dev": "tsx watch src/index.ts",
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "@devflow-modules/vibe-core": "workspace:*",
@@ -17,7 +18,8 @@
     "@supabase/supabase-js": "^2.81.0",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
-    "fastify": "^4.29.1",
+    "fastify": "^5.6.2",
+    "fastify-plugin": "^5.1.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -30,5 +32,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
