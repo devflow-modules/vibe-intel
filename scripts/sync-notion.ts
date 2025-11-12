@@ -13,10 +13,23 @@ dotenv.config();
 const git = simpleGit();
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-// IDs das páginas Notion (usando .env ou hardcoded se necessário)
-const SPRINT_PAGES: Record<number, string> = JSON.parse(
-  process.env.NOTION_SPRINT_IDS || "{}"
-);
+/* ---------------------------------------------------------
+ * ⚙️ Configurações
+ * --------------------------------------------------------- */
+
+// IDs das páginas Notion (via .env ou hardcoded)
+function normalizeNotionIds(envValue?: string): Record<number, string> {
+  if (!envValue) return {};
+  const parsed = JSON.parse(envValue);
+  const normalized: Record<number, string> = {};
+  for (const [key, value] of Object.entries(parsed)) {
+    // remove hífens para compatibilidade com a API do Notion
+    normalized[Number(key)] = (value as string).replace(/-/g, "");
+  }
+  return normalized;
+}
+
+const SPRINT_PAGES = normalizeNotionIds(process.env.NOTION_SPRINT_IDS);
 const LINKEDIN_DB_ID = process.env.NOTION_LINKEDIN_DB_ID || "";
 
 /* ---------------------------------------------------------
@@ -54,6 +67,9 @@ async function updateSprintStatus(sprintNumber: number, status: string) {
 
 async function getSprintCommits(branch: string): Promise<string[]> {
   try {
+    // garante que a main esteja disponível no ambiente CI
+    await git.fetch(["origin", "main", "--depth=1"]);
+
     const log = await git.log({ from: "main", to: branch });
     const commits = log.all.map((c: { message: string }) => c.message).filter(Boolean);
 
@@ -85,7 +101,7 @@ async function updateSprintDeliverables(sprintNumber: number, branch: string) {
   const commits = await getSprintCommits(branch);
   if (!pageId || commits.length === 0) return;
 
-  const deliverables = commits.slice(0, 20).join("\n"); // limita tamanho
+  const deliverables = commits.slice(0, 20).join("\n");
   try {
     await notion.pages.update({
       page_id: pageId,
@@ -112,20 +128,13 @@ async function updateSprintDeliverables(sprintNumber: number, branch: string) {
 
 async function calculateSprintTime(branch: string) {
   try {
-    const firstCommit = (await git.raw([
-      "log",
-      branch,
-      "--reverse",
-      "--format=%ct",
-      "--max-count=1",
-    ])).trim();
+    const firstCommit = (
+      await git.raw(["log", branch, "--reverse", "--format=%ct", "--max-count=1"])
+    ).trim();
 
-    const lastCommit = (await git.raw([
-      "log",
-      branch,
-      "--format=%ct",
-      "--max-count=1",
-    ])).trim();
+    const lastCommit = (
+      await git.raw(["log", branch, "--format=%ct", "--max-count=1"])
+    ).trim();
 
     if (!firstCommit || !lastCommit) return null;
 
