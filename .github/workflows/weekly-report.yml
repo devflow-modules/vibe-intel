@@ -34,10 +34,14 @@ jobs:
         run: npx tsx scripts/weekly-report.ts
 
       # 4️⃣ Commitar relatório se gerado
-      - name: 💾 Commit Report
+      - name: 💾 Commit Report (safe)
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add reports/
-          git diff --cached --quiet || git commit -m "docs: relatório semanal automático"
-          git push
+          if [ -d "reports" ]; then
+            git add reports/
+            git diff --cached --quiet || git commit -m "docs: relatório semanal automático"
+            git push
+          else
+            echo "⚠️ Nenhum relatório gerado (pasta reports/ inexistente)"
+          fi
