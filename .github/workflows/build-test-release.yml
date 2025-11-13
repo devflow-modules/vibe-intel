@@ -172,11 +172,11 @@ jobs:
           node-version: "22"
 
       - name: 🚀 Deploy to Railway
-        uses: railwayapp/railway-action@v1
+        uses: railwayapp/github-action@v3
         with:
-            service: vibe-api
-            environment: ${{ startsWith(github.ref_name, 'sprint/') && 'staging' || 'production' }}
-            token: ${{ secrets.RAILWAY_TOKEN }}
+          railwayToken: ${{ secrets.RAILWAY_TOKEN }}
+          service: "vibe-api"
+          environment: ${{ startsWith(github.ref_name, 'sprint/') && 'staging' || 'production' }}
 
       - name: 🧾 Tail Logs (Pino + OpenTelemetry)
         if: success()
