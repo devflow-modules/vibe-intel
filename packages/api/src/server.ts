@@ -27,7 +27,14 @@ export async function buildServer() {
 
   // 🔹 Logger central do Fastify (instância Pino pura)
   const log = createLogger("api");
-  const app = Fastify({ logger: log.raw });
+  const app = Fastify({
+    logger: {
+      level: process.env.LOG_LEVEL || "info",
+      transport: process.env.NODE_ENV !== "production"
+        ? { target: "pino-pretty", options: { colorize: true } }
+        : undefined,
+    },
+  });
 
   // ─── Core middlewares ───────────────────────────────────────────────
   await app.register(cors, { origin: "*" });

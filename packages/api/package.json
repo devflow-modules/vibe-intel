@@ -5,10 +5,11 @@
   "main": "dist/server.js",
   "types": "dist/server.d.ts",
   "scripts": {
+    "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
-    "prepublishOnly": "pnpm build",
-    "dev": "tsx watch src/index.ts",
-    "clean": "rimraf dist"
+    "start": "node dist/server.js",
+    "clean": "rimraf dist",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@devflow-modules/vibe-core": "workspace:*",
@@ -32,7 +33,5 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"]
 }
