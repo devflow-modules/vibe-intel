@@ -2,18 +2,28 @@ import { describe, it, expect, vi } from "vitest";
 import { runAgent } from "../src/index.js";
 import type { CodeReviewResult } from "../src/skills/code_review.js";
 
-// Mock do módulo compartilhado
 vi.mock("@devflow-modules/vibe-shared", async (importOriginal) => {
     const actual = (await importOriginal()) as Record<string, any>;
     return {
         ...actual,
+        setupTelemetry: vi.fn().mockResolvedValue(undefined),
         ai: vi.fn().mockResolvedValue({
-            content: "✅ Código analisado com sucesso.",
-            raw: {},
+            content: '{"summary":"sucesso","findings":[],"metrics":{"filesCount":1,"chars":10}}',
+            raw: {}
         }),
-        setupTelemetry: vi.fn(async () => ({
-            tracer: { startSpan: vi.fn() },
-        })),
+        aiClient: {
+            chat: {
+                completions: {
+                    create: vi.fn().mockResolvedValue({
+                        choices: [
+                            {
+                            message: { content: '{"summary":"sucesso","findings":[],"metrics":{"filesCount":1,"chars":10}}' }
+                            }
+                        ]
+                    })
+                }
+            }
+        }
     };
 });
 

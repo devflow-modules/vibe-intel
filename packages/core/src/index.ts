@@ -1,5 +1,13 @@
 import { setupTelemetry } from "@devflow-modules/vibe-shared";
-await setupTelemetry("vibe-core");
+
+let telemetryPromise: Promise<void> | null = null;
+
+export function initCore() {
+  if (!telemetryPromise) {
+    telemetryPromise = setupTelemetry("vibe-core");
+  }
+  return telemetryPromise;
+}
 
 export * from "./agent/agent.js";
 export * from "./agent/intent.js";

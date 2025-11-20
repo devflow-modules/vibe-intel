@@ -11,18 +11,41 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const envPath = path.resolve(__dirname, "../../../.env.local");
 dotenv.config({ path: envPath });
 
-if (!process.env.OPENAI_API_KEY) {
+const isTestEnv = process.env.NODE_ENV === "test";
+
+const openAiKey = process.env.OPENAI_API_KEY;
+if (!openAiKey && !isTestEnv) {
   console.error(`❌ OPENAI_API_KEY não encontrada.
 Verifique o arquivo .env.local na raiz (${envPath})`);
   process.exit(1);
 }
 
+function createMockClient() {
+  return {
+    chat: {
+      completions: {
+        create: async () => ({
+          choices: [
+            {
+              message: {
+                content: '{"mocked":true}'
+              }
+            }
+          ]
+        })
+      }
+    }
+  };
+}
+
 // =========================
 // 🤖 Cliente OpenAI
 // =========================
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const client = isTestEnv
+  ? (createMockClient() as unknown as OpenAI)
+  : new OpenAI({
+      apiKey: openAiKey,
+    });
 
 // =========================
 // 🧠 Função principal com tipagem genérica
