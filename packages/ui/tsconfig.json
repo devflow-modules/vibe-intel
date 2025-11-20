@@ -15,9 +15,15 @@
       ]
     },
     "types": [
-      "node",
       "vitest/globals",
+      "node",
+      "@testing-library/jest-dom",
       "next"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
     "noEmit": true,
     "isolatedModules": true,
