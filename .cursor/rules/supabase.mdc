@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+description: "Regras para uso correto e seguro do Supabase (Admin API + RLS)."
+---
+
+# Supabase — Vibe Intel
+
+Siga sempre estas práticas ao usar o Supabase:
+
+- Nunca expor a chave service_role no frontend.
+- Supabase Admin deve ser usado exclusivamente em camada de serviço.
+- RLS deve estar ATIVO para todas as tabelas sensíveis.
+- Policies devem ser documentadas dentro do projeto.
+- Supabase Client público só pode ser usado no frontend com permissões mínimas.
+- Todas as queries devem ser validadas com Zod antes de entrar no banco.
+- Sempre tratar erros de Supabase com try/catch e retornar via sendError.
+- Nunca ignorar informações de erro retornadas pela API.
+- Uploads e downloads devem passar por validação de permissões.
+- Evitar selects amplos — sempre especificar colunas.
+- Conexões externas devem ser tratadas como IO inseguro.
+- Logs relacionados ao Supabase NÃO devem incluir tokens ou payloads sensíveis.

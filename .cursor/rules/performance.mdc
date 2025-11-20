@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+description: "Regras oficiais de performance para UI, API e Core do Vibe Intel."
+---
+
+# Performance — Vibe Intel
+
+Siga SEMPRE estas diretrizes de performance:
+
+## Frontend (Next.js 15)
+
+- Priorizar RSC (Server Components) para evitar JS no cliente.
+- Evitar renderizações desnecessárias — usar memo, useCallback, useMemo.
+- Não recalcular valores caros dentro de componentes; usar hooks especializados.
+- Utilizar streaming e suspense quando apropriado.
+- Dividir componentes grandes em unidades menores.
+- Evitar estados globais quando estado local resolve.
+- Utilizar lazy loading onde fizer sentido.
+- Minimizar dependências externas.
+- Evitar loops complexos no render.
+- Não realizar fetch no cliente quando pode ser feito no server.
+
+## Tailwind / CSS
+
+- Utilizar classes utilitárias em vez de estilos repetitivos.
+- Minimizar estilos de animação caros (box-shadow, blur, filters).
+- Usar GPU-friendly transforms (translate, scale).
+
+## Backend (Node.js + Prisma + Supabase)
+
+- Nunca fazer SELECT *.
+- Utilizar .select e .include conforme necessário.
+- Otimizar queries pesadas.
+- Evitar loops com IO dentro (usar Promise.all).
+- Utilizar caching (futuro: Redis).
+- Evitar N+1 queries.
+- Limitar payload de resposta.
+
+## Core Agent
+
+- Evitar processamento desnecessário entre skills.
+- Limitar reconstrução de contexto.
+- Preferir funções puras e rápidas.
+- Evitar parse redundante de arquivos.

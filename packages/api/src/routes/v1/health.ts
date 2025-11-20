@@ -1,7 +1,8 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
+import { healthController } from "../../controllers/health/healthController.js";
 
-export async function registerHealthRoute(fastify: FastifyInstance) {
-  fastify.get("/v1/health", async () => {
-    return { ok: true, uptime: process.uptime() };
-  });
+const BASE_PATH = "/api/v1";
+
+export async function registerHealthRoute(app: FastifyInstance) {
+  app.get(`${BASE_PATH}/health`, healthController);
 }

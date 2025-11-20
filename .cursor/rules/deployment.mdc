@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+description: "Regras de deploy e ambientes (CI/CD + produção) do Vibe Intel."
+---
+
+# Deployment — Vibe Intel
+
+Regras essenciais:
+
+## Ambientes
+
+- Nunca expor variáveis sensíveis no repositório.
+- Somente usar arquivos `.env.local` (não versionados).
+- Produção deve ser gerida via GitHub Actions secrets.
+
+## Next.js (UI)
+
+- Deploy apenas via Vercel.
+- Build deve ser livre de warnings.
+- Imagens devem usar domain whitelist.
+- Edge functions apenas quando necessário.
+
+## API
+
+- Deploy via Railway/Render (dependendo do ambiente final).
+- Banco de dados deve seguir migrações Prisma.
+- Nunca realizar deploy com migrações pendentes.
+
+## CI/CD
+
+- Testes → Lint → TypeCheck → Build → Release.
+- semantic-release controla versionamento.
+- Não permitir merges com falhas.
+
+## Supabase
+
+- Policies RLS devem ser aplicadas antes de deploy.
+- Storage deve ter regras de permissão revisadas.
+- Nunca expor service_role no cliente.
+
+## Logs
+
+- Produção usa logger JSON.
+- Nada de console.log na UI, API ou Core.

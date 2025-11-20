@@ -1,0 +1,27 @@
+---
+alwaysApply: true
+description: "Regras de estado global (Zustand + slices) no Vibe Intel."
+---
+
+# State Management — Vibe Intel
+
+Siga estas regras ao criar ou alterar estado global:
+
+- Estado global deve ser gerenciado EXCLUSIVAMENTE com Zustand.
+- Cada domínio deve ter seu próprio slice:
+  ex: createAuthSlice, createUserSlice, createCotacoesSlice.
+- A store final combina slices de forma explícita e tipada.
+- Nunca colocar lógica de negócio dentro de slices — apenas estado e ações.
+- Ações devem ser simples, diretas e previsíveis.
+- Sempre tipar:
+  - estado
+  - actions
+  - retornos
+- Usar Zustand persist apenas quando necessário.
+- Nunca chamar fetch dentro de uma store.
+- Funções que alteram estado devem ser puras e idempotentes.
+- Regras:
+  - /ui/src/store/[domain].slice.ts
+  - /ui/src/store/index.ts (store combinada)
+- Hooks derivados do estado devem ser criados separadamente quando houver lógica.
+- Nunca acessar múltiplos slices dentro do mesmo componente — criar hook de domínio.

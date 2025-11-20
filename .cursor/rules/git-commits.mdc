@@ -1,0 +1,31 @@
+---
+alwaysApply: true
+description: "Regras de commits semânticos e boas práticas de versionamento."
+---
+
+# Commits — Vibe Intel
+
+Siga rigorosamente Conventional Commits:
+
+Tipos permitidos:
+
+- feat:
+- fix:
+- docs:
+- test:
+- refactor:
+- chore:
+- perf:
+- ci:
+
+Regras:
+
+- Linha 1 curta e objetiva.
+- Linha 2 em branco.
+- Corpo explicando o motivo.
+- Commit deve refletir uma única intenção.
+- Nada de commits “WIP”.
+- Branches:
+  - feature/[nome]
+  - fix/[nome]
+  - refactor/[nome]

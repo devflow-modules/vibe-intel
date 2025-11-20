@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: "Regras para organização e boundaries do monorepo Turbo (PNPM)."
+---
+
+# Regras do Monorepo — Vibe Intel
+
+Siga estas regras ao gerar código no monorepo:
+
+- Cada package deve ter responsabilidade isolada:
+  - core: agente e skills
+  - api: backend
+  - ui: frontend (Next.js)
+  - shared: tipos, utils e schemas globais
+- Nunca duplicar código entre packages.
+- Tudo que é compartilhado deve estar em /shared.
+- UI não deve importar diretamente nada de /api.
+- API não deve importar nada de /ui.
+- Imports entre pacotes devem ser explícitos e absolutos.
+- Cada package deve ter tsconfig e structure próprios.
+- Nunca criar dependência circular entre pacotes.
+- Sempre seguir layout definido em architecture.md.

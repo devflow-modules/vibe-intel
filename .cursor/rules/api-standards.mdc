@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: "Regras de padronização da API (rotas, controllers, serviços)."
+---
+
+# Padrões de API — Vibe Intel
+
+Siga estes padrões ao criar endpoints:
+
+- Rotas devem seguir padrões REST.
+- Sempre usar:
+  - Controller → valida e chama service
+  - Service → lógica de negócio
+  - Schema Zod → input/output
+- Nenhuma lógica no controller.
+- Sempre retornar `sendSuccess` ou `sendError`.
+- Status codes corretos (ex: 200, 400, 401, 404, 500).
+- JSON sempre bem formatado.
+- Versionamento: `api/v1/`.
+- Integrações externas devem ser isoladas em camadas específicas.
+- Supabase Admin apenas em services.
+- Nada de rotas inline no arquivo principal.

@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+description: "Regras oficiais para backend (API, Services, Controllers) do Vibe Intel."
+---
+
+# Regras de Backend — Vibe Intel
+
+Siga estas práticas ao gerar rotas, serviços, schemas ou controllers:
+
+- Controller nunca deve conter lógica de negócio.
+- Service deve conter 100% das regras de negócio.
+- Schema Zod obrigatório para entrada e saída.
+- Prisma: sempre utilizar cliente centralizado, nunca instanciar diretamente.
+- Supabase Admin: uso apenas em camada de serviço.
+- Nunca acessar req/res dentro do service.
+- Sempre retornar erros via `sendError`.
+- Sem retorno de erro cru.
+- Nunca expor stack trace.
+- Sempre tipar parâmetros e retornos do service.
+- Regras de segurança:
+  - RLS habilitado para todas as tabelas sensíveis.
+  - Nunca expor `service_role` no frontend.
+- Toda rota deve ter testes de integração.
+- Toda função de service deve ter testes unitários.
+- Estrutura obrigatória:
+  - /routes/[feature]/route.ts
+  - /controllers/[feature]Controller.ts
+  - /services/[feature]Service.ts
+  - /schemas/[feature]Schema.ts
+  - /tests/[feature].test.ts
+- Nunca criar endpoints sem autenticação se o caso exigir.
+- Usar ESM sempre.
+- Não permitir lógica duplicada entre serviços.
+- Lidar com falhas externas (ex: APIs) usando try/catch explícito.

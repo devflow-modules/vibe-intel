@@ -1,0 +1,20 @@
+---
+alwaysApply: true
+description: "Regras para refactors seguros e previsíveis no Vibe Intel."
+---
+
+# Refactors — Vibe Intel
+
+Regras obrigatórias durante refactors:
+
+- Nunca alterar arquitetura ou estrutura de pastas sem pedir confirmação explícita.
+- Refactors devem manter 100% da lógica original e garantir testes passando.
+- Não renomear arquivos ou mover diretórios automaticamente.
+- Não alterar nomes de funções públicas sem identificar impacto.
+- Refactors devem ser pequenos, focados e cirúrgicos.
+- Nunca alterar APIs públicas sem seguir regras de versionamento.
+- Não reescrever módulos completos sem justificativa.
+- Sempre preservar contratos de tipos e schemas.
+- Se o refactor reduzir legibilidade, deve ser rejeitado.
+- Comentários originais que guardam contexto devem ser mantidos.
+- Refactors só são permitidos dentro do escopo pedido pelo usuário.

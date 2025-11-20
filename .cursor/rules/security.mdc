@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+description: "Regras de segurança obrigatórias para backend e API."
+---
+
+# Segurança — Vibe Intel
+
+A segurança deve ser aplicada rigorosamente:
+
+- RLS obrigatório para todas as tabelas sensíveis.
+- Nunca expor a service_role key no frontend.
+- JWT deve usar expiração curta e assinatura segura.
+- Cookies devem ser HttpOnly, Secure e SameSite.
+- Não retornar stack traces ao cliente.
+- Sanitizar entradas antes de qualquer operação.
+- Logs nunca devem conter dados sensíveis.
+- Sempre capturar exceções e retornar `sendError`.
+- Nunca expor informações internas da API.
+- Validar tudo com Zod antes de usar.

@@ -1,0 +1,47 @@
+---
+alwaysApply: true
+description: "Regras oficiais de acessibilidade para UI do Vibe Intel."
+---
+
+# Accessibility — Vibe Intel
+
+A interface deve ser totalmente acessível seguindo estas regras:
+
+## Estrutura Semântica
+
+- Utilizar elementos HTML corretos: `button`, `nav`, `header`, etc.
+- Evitar divs sem função para elementos clicáveis.
+- Sempre usar `label` associado a inputs.
+
+## ARIA
+
+- Usar atributos ARIA apenas quando necessário.
+- Adicionar aria-label em ícones sem texto.
+- Garantir roles apropriadas para componentes complexos.
+
+## Navegação
+
+- Todos os elementos interativos devem ser acessíveis por teclado.
+- Foco visível em todos os elementos.
+- Não remover outline padrões sem alternativa acessível.
+
+## Imagens e Ícones
+
+- Imagens importantes devem ter alt significativo.
+- Ícones decorativos devem ter alt="" ou role="presentation".
+
+## Formulários
+
+- Inputs devem ter labels explícitas.
+- Erros devem ser anunciados e visualmente claros.
+- Inputs com validação devem comunicar estado (aria-invalid).
+
+## Contraste
+
+- Seguir WCAG AA no mínimo.
+- Garantir contraste suficiente entre texto e fundo.
+
+## Componentes
+
+- Modais devem bloquear fundo com ARIA modal.
+- Estruturas complexas (tabs, dropdowns, accordions) devem usar roles adequadas.

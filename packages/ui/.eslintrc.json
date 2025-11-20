@@ -1,0 +1,6 @@
+{
+  "root": false,
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {}
+}
+

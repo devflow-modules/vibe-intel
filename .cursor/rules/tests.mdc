@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: "Regras oficiais de testes (Vitest, Testing Library, Supabase, Prisma)."
+---
+
+# Padrões de Testes — Vibe Intel
+
+Siga sempre estes padrões ao gerar testes:
+
+- Testes unitários obrigatórios para cada service.
+- Testes de integração obrigatórios para cada rota.
+- Prisma deve ser mockado usando um mock centralizado (shared/test-utils).
+- Supabase deve ser mockado adequadamente, sem chamadas reais.
+- UI deve usar Testing Library + renderHook quando necessário.
+- Evitar snapshots a menos que realmente façam sentido.
+- Cada teste deve ser determinístico, sem depender de dados externos.
+- Estrutura recomendada:
+  - unit: packages/[pkg]/tests/unit/
+  - integration: packages/[pkg]/tests/integration/
+- Sempre testar casos de sucesso e erro.
+- Jamais ignorar erros silenciosamente.
+- Cobertura mínima recomendada: 80%.

@@ -1,0 +1,43 @@
+---
+alwaysApply: true
+description: "Estrutura oficial de arquivos e pastas no Vibe Intel."
+---
+
+# Estrutura de Arquivos — Vibe Intel
+
+Obrigatório seguir a estrutura:
+
+/packages
+  /api
+    /routes
+    /controllers
+    /services
+    /schemas
+    /tests
+  /ui
+    /src/app
+    /components
+    /hooks
+    /services
+    /schemas
+    /store
+    /tests
+  /shared
+    /types
+    /utils
+    /schemas
+  /core
+    /agent
+    /skills
+    /memory
+    /context
+    /utils
+
+Regras:
+
+- Não adicionar arquivos fora dessas pastas sem permissão explícita.
+- Não criar novas pastas arbitrárias.
+- Cada domínio deve ter sua própria pasta.
+- Index.ts deve centralizar exports públicos.
+- Não misturar arquivos UI dentro do API e vice-versa.
+- Sempre nomear arquivos seguindo convenções oficiais.

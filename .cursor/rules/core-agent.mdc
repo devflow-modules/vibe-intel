@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+description: "Regras específicas para o pacote core do Vibe Intel."
+---
+
+# Core Agent — Vibe Intel
+
+Regras para gerar código dentro do core:
+
+- Skills devem ficar isoladas e ter responsabilidade única.
+- Memory deve ser implementada como driver substituível.
+- Context loaders devem ser seguros e sem side effects.
+- Nunca executar comandos diretos sem sandbox.
+- Todo código deve ser totalmente tipado.
+- Executores devem ser puros e previsíveis.
+- Nenhum acesso direto ao sistema fora dos helpers.
+- Core não pode depender de UI ou API.
+- Resolver de habilidades deve seguir roteamento central.

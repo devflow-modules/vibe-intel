@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: "Estilo pessoal de desenvolvimento do Gustavo Marques."
+---
+
+# Estilo Gustavo — Regras de Escrita e Desenvolvimento
+
+Siga sempre o estilo de desenvolvimento preferido pelo Gustavo:
+
+- Código limpo, explícito e autoexplicativo.
+- Comentários somente quando agregarem contexto técnico real.
+- Preferir funções pequenas, puras e totalmente tipadas.
+- Evitar abstrações desnecessárias.
+- Clareza acima de “clever code”.
+- Se houver duas soluções possíveis, prefira a mais simples, estável e previsível.
+- Nenhum código duplicado.
+- Testes diretos, sem mocks excessivos.
+- Lógica deve ser dividida por domínio.
+- Sempre usar nomes claros (ex: `registerUser`, `fetchCotacoes`, `resolveCliente`).
+- Nunca gerar código ou arquivos não solicitados.
+- Respeitar a arquitetura definida em `.gpt/docs/architecture.md`.
+- Integrar sempre com blueprints e conventions.
