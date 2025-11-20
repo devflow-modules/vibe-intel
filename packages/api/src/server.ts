@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 
 import cors from "@fastify/cors";
 import rateLimit from "@fastify/rate-limit";
-import jwt from "@fastify/jwt";
 
 import { registerHealthRoute } from "./routes/v1/health.js";
 import { registerTasksRoute } from "./routes/v1/tasks.js";
-import { reviewHandler } from "./routes/v1/review.js";
+import { registerReviewRoute } from "./routes/v1/review.js";
+import { registerAuth } from "./lib/auth.js";
 
 // 🔹 Plugins da Sprint 2
 import correlationId from "./plugins/correlationId.js";
@@ -39,9 +39,7 @@ export async function buildServer() {
   // ─── Core middlewares ───────────────────────────────────────────────
   await app.register(cors, { origin: "*" });
   await app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
-  await app.register(jwt, {
-    secret: process.env.JWT_SECRET || "development_secret",
-  });
+  await app.register(registerAuth);
 
   // ─── Plugins de observabilidade ─────────────────────────────────────
   await app.register(correlationId);
@@ -50,19 +48,10 @@ export async function buildServer() {
   await app.register(telemetry); // 🔹 Spans automáticos por requisição
   await app.register(errorHandler);
 
-  // ─── JWT decorator ──────────────────────────────────────────────────
-  app.decorate("authenticate", async (req: any, reply: any) => {
-    try {
-      await req.jwtVerify();
-    } catch (err) {
-      reply.send(err);
-    }
-  });
-
   // ─── Routes ─────────────────────────────────────────────────────────
   await registerHealthRoute(app);
   await registerTasksRoute(app);
-  app.post("/v1/review", reviewHandler);
+  await registerReviewRoute(app);
 
   // ─── Lifecycle ──────────────────────────────────────────────────────
   app.ready().then(() => log.info("✅ Fastify app ready"));

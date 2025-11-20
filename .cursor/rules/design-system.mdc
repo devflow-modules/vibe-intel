@@ -1,0 +1,59 @@
+---
+alwaysApply: true
+description: "Regras para o Design System oficial do Vibe Intel (cores, espaçamentos, tipografia, tokens)."
+---
+
+# Design System — Vibe Intel
+
+Todos os componentes devem seguir o design system oficial:
+
+## Tokens
+
+- Utilizar tokens de cor definidos no projeto (ex: primary, secondary, accent).
+- Utilizar spacing padronizado (ex: spacing-1..spacing-8).
+- Tipografia deve usar tokens oficiais (ex: heading-xl, body-md).
+
+## Tailwind v4
+
+- Sempre usar classes utilitárias do Tailwind.
+- Nenhum estilo inline exceto casos extremamente necessários.
+- Usar variantes de estado (hover, focus, active) sempre com consistência.
+
+## Cores
+
+- Somente utilizar cores definidas no tema.
+- Evitar valores hex diretamente no componente.
+- Cores devem ser usadas conforme significado (semantic colors).
+
+## Tipografia
+
+- Titles = classes de heading.
+- Texto = body classes.
+- Nada de usar h1/h2/h3 para estilização apenas.
+
+## Componentização
+
+- Criar componentes reutilizáveis e centralizados.
+- Componentes globais devem ir para /ui/src/components/global.
+- Não criar múltiplas versões do mesmo componente.
+- Utilizar atomic design (atoms → molecules → organisms).
+
+## Layout
+
+- Padding e margin sempre baseados nos tokens.
+- Grid e flex devem seguir padrões:
+  - gap obrigatório
+  - centralização consistente
+- Evitar aninhamento profundo de containers.
+
+## Animações
+
+- Usar framer-motion com presets.
+- Evitar animações pesadas.
+- Todas as animações devem ser opcionais e não bloquear interação.
+
+## Responsividade
+
+- Utilizar breakpoints do Tailwind.
+- Nunca esconder conteúdo importante em mobile.
+- Garantir legibilidade e espaçamento adequado.

@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+description: "Regras para atingir e manter qualidade 10/10 no Vibe Intel."
+---
+
+# Padrões de Qualidade 10/10 — Vibe Intel
+
+A geração de código deve seguir estes critérios obrigatórios:
+
+- Zero uso de `any`.
+- Tipagem estrita em todos os arquivos.
+- Cada módulo deve ter testes unitários.
+- Rotas devem ter testes de integração.
+- UI de páginas críticas deve ter testes de renderização.
+- Todas as funções devem ser puras (exceto controllers/handlers).
+- Zod obrigatório para validação (input e output).
+- Código nunca deve gerar warnings no TypeScript.
+- Imports absolutos sempre com "@/".
+- Nenhum trecho de lógica repetida.
+- Logs usando formato JSON estruturado.
+- Controlar erros centralmente: `sendError` e `sendSuccess`.
+- Nada deve ser enviado para produção sem testes mínimos.
+- Toda mudança deve seguir Conventional Commits.
+- Arquitetura deve permanecer consistente entre pacotes.
+- Nunca ignorar erros silenciosamente.
+- Não criar side effects não documentados.

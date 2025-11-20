@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+description: "Regras do package shared — limites e responsabilidades."
+---
+
+# Shared Package — Vibe Intel
+
+Regras:
+
+- Somente tipos, utils, schemas e funções puras.
+- Nada de lógica de negócio.
+- Nada de estado.
+- Nada de UI.
+- Nada de dependência de API.
+- Todos os exports via index.ts.
+- Schemas Zod globais devem ficar aqui.
+- Nunca criar dependências que apontem para UI, API ou Core.
+- Código deve ser 100% reutilizável.

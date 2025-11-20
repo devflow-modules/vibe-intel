@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+description: "Regras oficiais para versionamento e evolução da API (REST v1/v2)."
+---
+
+# API Versioning — Vibe Intel
+
+Diretrizes obrigatórias:
+
+- Toda API deve estar dentro de uma versão: /api/v1/, /api/v2/…
+- Nunca modificar endpoints existentes sem criar nova versão.
+- Mudanças breaking exigem versão nova (v2).
+- Migrações de schema exigem comunicação explícita.
+- Services e controllers devem indicar claramente a versão.
+- Documentação deve ser atualizada sempre que nova versão surgir.
+- Rotas deprecated devem ter data de remoção.
+- Nunca expor múltiplas versões conflitantes no mesmo path.
+- Respostas e erros devem permanecer consistentes entre versões.

@@ -37,6 +37,12 @@
       ],
       "@devflow-modules/vibe-api/*": [
         "packages/api/src/*"
+      ],
+      "@devflow-modules/vibe-ui": [
+        "packages/ui/src/index.ts"
+      ],
+      "@devflow-modules/vibe-ui/*": [
+        "packages/ui/src/*"
       ]
     }
   },

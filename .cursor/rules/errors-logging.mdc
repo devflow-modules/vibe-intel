@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+description: "Padrões de erros e logging em toda a plataforma Vibe Intel."
+---
+
+# Erros e Logging — Vibe Intel
+
+Regras:
+
+- Nunca usar console.log.
+- Usar logger centralizado.
+- Logs em JSON.
+- Sempre incluir contexto do domínio.
+- sendError deve ter mensagem clara e status correto.
+- Nunca vazar stack trace.
+- Erros externos devem ser embrulhados.
+- Logs não podem conter dados sensíveis.
+- Manter coerência entre API, Core e UI.

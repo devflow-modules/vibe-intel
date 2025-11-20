@@ -1,0 +1,30 @@
+---
+alwaysApply: true
+description: "Regras do frontend oficial do Vibe Intel (Next.js 15 + RSC + Tailwind v4)."
+---
+
+# Regras de Frontend — Vibe Intel (Next.js 15)
+
+Siga estas regras ao gerar qualquer código de UI:
+
+- Priorizar Server Components sempre que possível.
+- Client Components somente quando houver estado ou interação real.
+- Formular com React Hook Form + Zod Resolver.
+- Manter formulários em arquivos separados por domínio.
+- Usar Zustand com slices nomeadas por contexto.
+- Nunca usar CSS manual ou inline — apenas Tailwind v4.
+- Evitar lógica dentro de componentes — colocar em hooks.
+- Hooks devem ser isolados, pequenos e fáceis de testar.
+- Serviços de fetch devem ficar em `/services`, não no componente.
+- Estrutura recomendada:
+  - /app/(dash)/[feature]/
+    - page.tsx
+    - components/
+    - hooks/
+    - schema.ts
+- Nunca chamar API diretamente dentro do componente — sempre via service.
+- Layout deve seguir design tokens oficiais do projeto.
+- Sem duplicação de componentes — usar `shared/ui` para elementos comuns.
+- Sempre tipar props e retornos dos componentes.
+- Nunca usar `useEffect` para lógica que pode ser resolvida no server.
+- Preferir RSC sempre que possível.

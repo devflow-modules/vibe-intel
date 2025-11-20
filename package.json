@@ -10,6 +10,7 @@
         "dev:shared": "pnpm --filter @devflow-modules/vibe-shared dev",
         "dev:core": "pnpm --filter @devflow-modules/vibe-core dev",
         "dev:api": "pnpm --filter @devflow-modules/vibe-api dev",
+        "dev:ui": "pnpm --filter @devflow-modules/vibe-ui dev",
         "clean": "rimraf dist",
         "lint": "turbo run lint",
         "test": "turbo run test",
@@ -64,7 +65,8 @@
     "workspaces": [
         "packages/core",
         "packages/shared",
-        "packages/api"
+        "packages/api",
+        "packages/ui"
     ],
     "pnpm": {
         "overrides": {

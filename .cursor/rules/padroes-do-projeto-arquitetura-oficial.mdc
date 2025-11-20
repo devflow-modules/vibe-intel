@@ -1,0 +1,20 @@
+---
+alwaysApply: true
+description: "Regras oficiais de arquitetura do projeto Vibe Intel. Aplique SEMPRE."
+---
+
+# Padrões de Arquitetura — Vibe Intel
+
+Siga rigorosamente os padrões deste projeto:
+
+- Código em ESM.
+- Estrutura baseada em módulos com boundaries claras.
+- Pastas obrigatórias para cada feature.
+- Zod para schemas (input e output).
+- Prisma e Supabase com tipagem estrita.
+- Arquivos de teste obrigatórios para cada módulo.
+- Imports absolutos com "@/".
+- Proibir uso de "any" e evitar unknown.
+- Respeitar nomenclaturas e patterns definidos em `.gpt/docs/conventions.md`.
+- Seguir os blueprints definidos em `.gpt/docs/blueprints.md`.
+- Nunca realizar alterações estruturais sem confirmação explícita.

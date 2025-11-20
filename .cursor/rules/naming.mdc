@@ -1,0 +1,49 @@
+---
+alwaysApply: true
+description: "Regras oficiais de nomenclatura para todo o Vibe Intel."
+---
+
+# Naming Conventions — Vibe Intel
+
+Padrões obrigatórios:
+
+## Arquivos
+
+- kebab-case para arquivos: example-file.ts
+- PascalCase apenas para componentes React.
+
+## Pastas
+
+- kebab-case ou nome de domínio: user-profile, auth, consultas.
+
+## Funções
+
+- camelCase: fetchUser, resolveCotacao, calculateScore.
+
+## Variáveis
+
+- camelCase para variáveis padrão.
+- CONSTANT_CASE para constantes.
+
+## Classes
+
+- PascalCase: UserService, ReportGenerator.
+
+## Testes
+
+- [feature].test.ts
+- [feature].integration.test.ts (se necessário)
+
+## Schemas
+
+- PascalCase: CreateUserSchema, LoginSchema.
+
+## Types
+
+- PascalCase: User, UserPayload.
+
+Regras:
+
+- Nomes devem ser claros, explícitos e descritivos.
+- Nada de abreviações enigmáticas.
+- Não renomear símbolos que fazem parte do contrato público.

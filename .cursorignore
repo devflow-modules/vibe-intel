@@ -1,0 +1,16 @@
+node_modules/
+.next/
+dist/
+build/
+coverage/
+turbo/
+pnpm-store/
+*.log
+.env
+.env.*
+*.tsbuildinfo
+supabase/.temp/
+.vscode/
+.idea/
+Dockerfile*
+docker-compose*

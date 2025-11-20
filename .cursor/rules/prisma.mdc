@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: "Regras para uso correto e seguro do Prisma ORM no Vibe Intel."
+---
+
+# Prisma — Vibe Intel
+
+Siga sempre estes padrões ao usar Prisma:
+
+- Utilizar um único PrismaClient compartilhado (singleton).
+- Nunca instanciar PrismaClient diretamente em arquivos de rota ou controller.
+- Acesso ao banco deve acontecer SOMENTE em services.
+- Todas as queries devem ser tipadas automaticamente via Prisma.
+- Sempre tratar erros com try/catch dentro dos services.
+- Transações devem ser explícitas com prisma.$transaction quando necessário.
+- Nunca retornar dados sensíveis diretamente (como senhas).
+- Consultas devem ser otimizadas (select/where/map).
+- Evitar N+1 queries — usar include/select corretamente.
+- Fields opcionais devem ser tratados explicitamente (null/undefined).
+- Schemas Prisma devem refletir as validações Zod.
+- Nunca expor erros brutos do Prisma ao cliente.
+- Prisma deve ser configurado para modo ESM.

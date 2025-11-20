@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+description: "Regras de CI/CD (GitHub Actions + semantic-release)."
+---
+
+# CI/CD — Vibe Intel
+
+Regras obrigatórias:
+
+- Workflows devem incluir:
+  - lint
+  - test
+  - build
+  - typecheck
+- semantic-release é obrigatório para versionamento.
+- Nenhum merge sem testes passando.
+- Proibir commits direto na main.
+- Releases automáticos apenas via CI.
+- PRs precisam de:
+  - descrição clara
+  - checklist
+  - referência a issue
+- Nada de alterar arquivos gerados automaticamente no CI.

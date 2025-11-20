@@ -1,0 +1,29 @@
+---
+alwaysApply: true
+description: "Padrões oficiais para componentes de UI no Vibe Intel (Next.js 15 + Tailwind v4)."
+---
+
+# UI Components — Vibe Intel
+
+Siga estes padrões ao gerar componentes de interface:
+
+- Sempre usar componentes funcionais (React).
+- Preferir Server Components; usar Client Components apenas quando houver:
+  - estado local
+  - interação do usuário
+  - hooks do React
+  - animações dinâmicas
+- Usar apenas Tailwind v4 para estilização. Nunca usar CSS inline manual.
+- Evitar lógica dentro do componente — mover tudo para hooks.
+- Componentes devem ser pequenos, reutilizáveis e com responsabilidade única.
+- Regras de nome:
+  - PascalCase para componentes
+  - camelCase para props
+- Tipar todas as props com TypeScript estrito.
+- Não aceitar props genéricas; sempre definir shape claro.
+- Estrutura recomendada:
+  - /components/[domain]/[FeatureComponent].tsx
+- Usar design tokens do projeto (ex: cores, espaçamentos, tipografia).
+- Evitar duplicação: componentes globais devem ir para shared/ui ou ui/components/global.
+- Nunca chamar fetch diretamente no componente.
+- Nunca acessar store global dentro de componentes puros; usar hooks específicos.

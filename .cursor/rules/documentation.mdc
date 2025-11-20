@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: "Padrões de documentação oficial do Vibe Intel."
+---
+
+Documentação — Vibe Intel
+=========================
+
+Regras:
+
+- Sempre gerar documentação junto com features complexas.
+- Usar markdown limpo e simples.
+- Todas as seções devem seguir:
+  - Overview
+  - Estrutura
+  - Fluxo
+  - Exemplo
+  - Notas
+- Tom técnico e neutro.
+- Links relativos, nunca URLs absolutas.
+- Atualizar architecture.md quando houver mudança estrutural.
+- Nenhuma documentação com texto redundante.
