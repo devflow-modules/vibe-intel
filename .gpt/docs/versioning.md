@@ -36,4 +36,7 @@ Notas
 - Qualquer breaking change deve criar nova versão.
 - Documentar links de PR/Release ao atualizar esta tabela.
 - Rotas antigas só podem ser removidas após confirmação com produto.
+- Mudanças estruturais (telemetria, error handling global, novas políticas de secrets) devem citar `initCore` e `resolveSecret` na descrição da versão.
+- Releases só avançam quando o pipeline valida logs estruturados (`createLogger` + `service`) e quando os builds TypeScript seguem a matriz (base NodeNext + override ESNext na UI).
+- Sprint 3 introduzirá o plano “Error Handling Global”; registre o rollout como `v1.x` assim que os códigos padronizados estiverem prontos.
 

@@ -1,5 +1,6 @@
 import fp from "fastify-plugin";
-import pino, { LoggerOptions } from "pino";
+import pino from "pino";
+import type { LoggerOptions } from "pino";
 import { trace, context as otelContext } from "@opentelemetry/api";
 
 type Ctx = { context?: string; correlationId?: string; [k: string]: any };

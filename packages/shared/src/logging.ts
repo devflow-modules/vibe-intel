@@ -1,4 +1,5 @@
-import pino, { LoggerOptions } from "pino";
+import pino from "pino";
+import type { LoggerOptions } from "pino";
 
 type Ctx = { context?: string; correlationId?: string; [k: string]: any };
 

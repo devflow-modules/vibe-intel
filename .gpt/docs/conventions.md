@@ -95,6 +95,8 @@ name: z.string().min(2),
 - Evitar unknown.
 - Sempre inferir tipos a partir de schemas.
 - Garantir que services sejam funções puras.
+- `tsconfig.base.json` define `module: "NodeNext"`, `moduleResolution: "NodeNext"`, `noImplicitAny: true` e `verbatimModuleSyntax: true`.
+- `packages/ui` sobrescreve para `module: "ESNext"` + `jsx: "react-jsx"`; `api` e `core` permanecem em NodeNext.
 
 ---
 
@@ -185,6 +187,10 @@ Seguir Conventional Commits:
 - JSON estruturado.
 - Nível: debug / info / warn / error.
 - Nada de console.log no código final.
+- Sempre usar `createLogger("contexto", { service: "<domínio>" })` e anexar `service` aos bindings.
+- Telemetria e skills do core só podem emitir logs após `initCore()` garantir o tracer ativo.
+- Usar sempre `createLogger("contexto")` tanto no API quanto no Core/Shared.
+- Eventos de telemetria devem virar logs com `msg` descritivo antes de propagar.
 
 ---
 
@@ -195,6 +201,9 @@ Seguir Conventional Commits:
 - JWT assinado com expiração curta.
 - Cookies HttpOnly + SameSite + Secure.
 - Schema obrigatório em toda request.
+- Secrets críticos (`JWT_SECRET`, `COOKIE_SECRET`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`) devem ser validados com helpers como `resolveSecret`/`resolveSupabaseSecret` e falhar o boot em produção.
+- Secrets obrigatórios (JWT/Cookie/Supabase/OpenAI) passam por `resolveSecret`; produção falha se faltarem.
+- Variáveis sensíveis nunca podem ter fallback "dev" em runtime produtivo.
 
 ---
 
@@ -223,3 +232,11 @@ Seguir Conventional Commits:
 - Alterações breaking só podem ir para `/api/v2`.
 - Cada rota deve declarar data de lançamento/depreciação em `docs/versioning.md`.
 - Ambas as versões devem conviver até a data limite publicada.
+
+---
+
+## 17. Observabilidade & Error Handling Global
+
+- Antes de chamar `runAgent`, chame `initCore()` e aguarde sua resolução.
+- Services devem capturar erros com AppError e enviar `deps.log?.error(...)` contendo `msg` e `code`.
+- Sprint 3 focará em catálogos de erro globais e enriquecimento automático de spans; códigos precisam estar documentados nos schemas.

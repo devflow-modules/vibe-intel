@@ -35,7 +35,7 @@ describe("runAgent", () => {
                 files: [
                     {
                         path: "src/example.ts",
-                        content: "console.log('Hello World')",
+                        content: "export function greet() { return 'Hello World'; }",
                     },
                 ],
                 language: "typescript",

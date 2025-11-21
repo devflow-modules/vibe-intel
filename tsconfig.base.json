@@ -6,10 +6,11 @@
     "lib": [
       "ES2022"
     ],
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "strict": true,
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,

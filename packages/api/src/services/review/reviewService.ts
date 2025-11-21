@@ -1,7 +1,9 @@
-import { runAgent } from "@devflow-modules/vibe-core";
+import { initCore, runAgent } from "@devflow-modules/vibe-core";
 import { AppError } from "@devflow-modules/vibe-shared";
 import type { ReviewRequest, ReviewResponse } from "../../schemas/review/reviewSchema.js";
 import { ReviewResponseSchema } from "../../schemas/review/reviewSchema.js";
+
+const coreReady = initCore() ?? Promise.resolve();
 
 type ReviewServiceDeps = {
   log?: {
@@ -15,6 +17,7 @@ export async function executeCodeReview(
   payload: ReviewRequest,
   deps: ReviewServiceDeps = {}
 ): Promise<ReviewResponse> {
+  await coreReady;
   deps.log?.info({ msg: "review:start", files: payload.files.length });
 
   try {

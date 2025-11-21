@@ -10,7 +10,6 @@ on:
 permissions:
   contents: write
   packages: write
-  id-token: write
 
 env:
   CI: true
@@ -28,12 +27,18 @@ jobs:
         uses: pnpm/action-setup@v3
         with:
           version: 10
+          run_install: false
+
+      - name: ♻️ Cache PNPM Store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: ⚡ Cache Turbo Build
         uses: actions/cache@v4
@@ -57,11 +62,17 @@ jobs:
         - uses: pnpm/action-setup@v3
           with:
             version: 10
+            run_install: false
+
+        - name: ♻️ Cache PNPM Store
+          uses: actions/cache@v4
+          with:
+            path: ~/.pnpm-store
+            key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
         - name: 🧰 Setup Node.js
           uses: actions/setup-node@v4
           with:
             node-version: "22"
-            cache: "pnpm"
         - name: 📦 Install Dependencies
           run: pnpm install --frozen-lockfile
         - name: ⚙️ Install Turborepo
@@ -79,11 +90,17 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: 10
+          run_install: false
+
+      - name: ♻️ Cache PNPM Store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
       - name: ⚙️ Install Turborepo
@@ -101,11 +118,17 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: 10
+          run_install: false
+
+      - name: ♻️ Cache PNPM Store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: "pnpm"
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
       - name: ⚙️ Install Turborepo
@@ -118,6 +141,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     needs: [build]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
@@ -125,23 +151,22 @@ jobs:
       - name: 🧰 Setup PNPM
         uses: pnpm/action-setup@v3
         with:
-          version: 10.21.0
+          version: 10
+          run_install: false
 
-      - name: 🧰 Setup Node.js (OIDC)
+      - name: ♻️ Cache PNPM Store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org/"
           scope: "@devflow-modules"
           always-auth: true
-
-      - name: ⚡ Cache PNPM
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
 
       - name: 📦 Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -150,8 +175,6 @@ jobs:
         run: pnpm build
 
       - name: 🚀 Semantic Release Monorepo
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm release
 
       - name: 📄 Summary
@@ -177,6 +200,9 @@ jobs:
           railwayToken: ${{ secrets.RAILWAY_TOKEN }}
           service: "vibe-api"
           environment: ${{ startsWith(github.ref_name, 'sprint/') && 'staging' || 'production' }}
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
 
       - name: 🧾 Tail Logs (Pino + OpenTelemetry)
         if: success()

@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyPluginAsync } from "fastify";
+import type { FastifyInstance, FastifyPluginAsync } from "fastify";
 import rateLimit from "@fastify/rate-limit";
 
 export const registerRateLimit: FastifyPluginAsync = async (

@@ -2,6 +2,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import { createLogger } from "./logging.js";
 import type { VibeAIRequest, VibeAIResponse } from "./types.js";
 
 // =========================
@@ -13,10 +14,14 @@ dotenv.config({ path: envPath });
 
 const isTestEnv = process.env.NODE_ENV === "test";
 
+const log = createLogger("ai-client", { service: "vibe-core" });
+
 const openAiKey = process.env.OPENAI_API_KEY;
 if (!openAiKey && !isTestEnv) {
-  console.error(`❌ OPENAI_API_KEY não encontrada.
-Verifique o arquivo .env.local na raiz (${envPath})`);
+  log.error({
+    msg: "openai:key_missing",
+    envPath,
+  });
   process.exit(1);
 }
 
