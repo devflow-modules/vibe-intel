@@ -1,13 +1,15 @@
-import { runAgent } from "../agent/agent.js";
-import type { VibeRunInput } from "@devflow-modules/vibe-shared";
+import { createLogger, type VibeRunInput } from "@devflow-modules/vibe-shared";
+import { initCore, runAgent } from "../index.js";
+
+const log = createLogger("core-cli", { service: "vibe-core" });
+const coreReady = initCore() ?? Promise.resolve();
 
 export async function runCLI() {
+  await coreReady;
   const input: VibeRunInput<"code_review"> = {
     skill: "code_review",
     payload: {
-      files: [
-        { path: "example.ts", content: "console.log('Hello');" },
-      ],
+      files: [{ path: "example.ts", content: "export const greet = 'Hello';" }],
       language: "typescript",
       focus: ["bugs", "style", "architecture"],
     },
@@ -16,15 +18,17 @@ export async function runCLI() {
       model: "gpt-4o-mini",
       telemetry: {
         onEvent(event) {
-          console.log(
-            `[${event.type}] ${event.skill}`,
-            event.payload ?? event.result
-          );
+          log.info({
+            msg: "cli:telemetry",
+            type: event.type,
+            skill: event.skill,
+            data: event.payload ?? event.result,
+          });
         },
       },
     },
   };
 
   const result = await runAgent(input);
-  console.log(JSON.stringify(result, null, 2));
+  log.info({ msg: "cli:result", result });
 }

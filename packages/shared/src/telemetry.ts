@@ -11,17 +11,20 @@ import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { createLogger } from "./logging.js";
 
 let sdk: NodeSDK | null = null;
+const baseLogger = createLogger("telemetry");
 
 /**
  * Inicializa a telemetria base da aplicação.
  * @param serviceName Nome lógico do serviço (ex: vibe-api, vibe-core)
  */
 export async function setupTelemetry(serviceName: string) {
+  const log = baseLogger.child({ service: serviceName });
   const enabled = process.env.OTEL_ENABLED === "true";
   if (!enabled) {
-    console.log(`[Telemetry] Disabled for ${serviceName}`);
+    log.info({ msg: "telemetry:disabled" });
     return;
   }
 
@@ -54,19 +57,19 @@ export async function setupTelemetry(serviceName: string) {
 
   try {
     await sdk.start();
-    console.log(`[Telemetry] Initialized for service: ${serviceName}`);
-    console.log(
-      `[Telemetry] Exporting to ${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}`
-    );
+    log.info({
+      msg: "telemetry:initialized",
+      endpoint: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
+    });
   } catch (err) {
-    console.error("[Telemetry] Failed to initialize", err);
+    log.error({ msg: "telemetry:init_failed", err });
   }
 
   // graceful shutdown
   const shutdown = async () => {
-    console.log("[Telemetry] Shutting down...");
+    log.info({ msg: "telemetry:shutdown_start" });
     await sdk?.shutdown().catch((err) =>
-      console.error("[Telemetry] Error during shutdown", err)
+      log.error({ msg: "telemetry:shutdown_error", err })
     );
     process.exit(0);
   };
@@ -81,6 +84,6 @@ export async function setupTelemetry(serviceName: string) {
 export async function shutdownTelemetry() {
   if (sdk) {
     await sdk.shutdown();
-    console.log("[Telemetry] SDK shutdown complete");
+    baseLogger.info({ msg: "telemetry:shutdown_complete" });
   }
 }

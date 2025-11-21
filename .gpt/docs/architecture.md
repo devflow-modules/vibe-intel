@@ -102,7 +102,36 @@ Atualize sempre que a arquitetura evoluir.
 
 ---
 
-## 6. Roadmap Arquitetural
+## 6. Observabilidade e Telemetria
+
+- `packages/shared/src/telemetry.ts` concentra a inicialização do OpenTelemetry.
+- `initCore` é exportado de `@devflow-modules/vibe-core` e **precisa ser aguardado** antes de qualquer chamada a `runAgent` (API, CLI, scripts).
+- A API chama `setupTelemetry("vibe-api")` durante `buildServer` e emite spans por requisição via plugin dedicado.
+- Toda coleta usa `createLogger` (pino) para registrar eventos de inicialização/erro; consoles são proibidos.
+- Falhas em initCore devem quebrar rápido, garantindo que nenhuma skill rode sem tracing.
+
+---
+
+## 7. Política de Secrets e Segurança Operacional
+
+- Secrets obrigatórios (`JWT_SECRET`, `COOKIE_SECRET`, `SUPABASE_SERVICE_ROLE`, `OPENAI_API_KEY`) são validados em runtime; em produção o boot falha se ausentes.
+- Função utilitária `resolveSecret` (API) encapsula essa validação e impede fallbacks inseguros.
+- Cookies sempre `HttpOnly + Secure + SameSite=strict`; JWT expira em 4h.
+- Supabase admin client só existe no backend e envia header `x-vibe-rls` para reforçar políticas.
+
+---
+
+## 8. Política de TypeScript e Builds
+
+- `tsconfig.base.json` é a fonte única e obriga `strict`, `noImplicitAny`, `module: "NodeNext"`, `moduleResolution: "NodeNext"` e `verbatimModuleSyntax`.
+- Pacotes podem sobrescrever apenas o necessário:
+  - `api` e `core` mantêm NodeNext para alinhamento com Fastify e skills.
+  - `ui` troca para `module: "ESNext"` + `jsx: "react-jsx"` para o bundler do Next.js 15.
+- O CI sempre roda `pnpm -r exec tsc --noEmit`, `pnpm exec turbo run test` e `pnpm exec turbo run build` antes de qualquer release.
+
+---
+
+## 9. Roadmap Arquitetural
 
 - Adicionar skill de code-review
 - Skill de testes automatizados
@@ -112,13 +141,13 @@ Atualize sempre que a arquitetura evoluir.
 
 ---
 
-## 7. Identificação do Projeto
+## 10. Identificação do Projeto
 
 Projeto: Vibe Intel  
 Autor: Gustavo Marques  
 Data Atual: 19/11/2025
 
-## 8. Versões da API
+## 11. Versões da API
 
 - Base oficial: `/api/v1/*`.
 - Controllers e services devem declarar a versão explicitamente ao exportar (ex: `registerTasksRoute` registra sempre em `/api/v1/tasks`).
@@ -127,3 +156,12 @@ Data Atual: 19/11/2025
   - data de lançamento
   - data de depreciação (quando aplicável)
   - compatibilidade entre versões
+
+---
+
+## 12. Sprint 3 — Error Handling Global
+
+- Objetivo: unificar tratamento de erros entre API/Core/UI usando o contrato `AppError` e telemetria estruturada.
+- Todos os services devem registrar contexto de domínio no logger antes de propagar erros.
+- Controllers continuarão respondendo via `sendError`, porém adicionaremos catálogo central de códigos.
+- Documentação e blueprints devem refletir esse fluxo antes da Sprint 3 iniciar.

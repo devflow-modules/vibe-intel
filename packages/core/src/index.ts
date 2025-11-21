@@ -1,10 +1,21 @@
-import { setupTelemetry } from "@devflow-modules/vibe-shared";
+import { createLogger, setupTelemetry } from "@devflow-modules/vibe-shared";
 
 let telemetryPromise: Promise<void> | null = null;
+const log = createLogger("core-init", { service: "vibe-core" });
 
 export function initCore() {
   if (!telemetryPromise) {
-    telemetryPromise = setupTelemetry("vibe-core");
+    log.info({ msg: "core:initCore:start" });
+    telemetryPromise = setupTelemetry("vibe-core")
+      .then(() => {
+        log.info({ msg: "core:initCore:ready" });
+      })
+      .catch((error) => {
+        log.error({ msg: "core:initCore:error", error });
+        throw error;
+      });
+  } else {
+    log.debug({ msg: "core:initCore:reuse" });
   }
   return telemetryPromise;
 }

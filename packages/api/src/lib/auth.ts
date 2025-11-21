@@ -7,6 +7,29 @@ import { sendError } from "./http.js";
 const TOKEN_COOKIE = "vibe_session";
 const DEFAULT_EXPIRATION = "4h";
 
+function resolveSecret(
+  value: string | undefined,
+  fallback: string,
+  name: "COOKIE_SECRET" | "JWT_SECRET"
+) {
+  if (process.env.NODE_ENV === "production" && !value) {
+    throw new Error(`${name} must be configured in production`);
+  }
+  return value ?? fallback;
+}
+
+const cookieSecret = resolveSecret(
+  process.env.COOKIE_SECRET,
+  "vibe_cookie_secret",
+  "COOKIE_SECRET"
+);
+
+const jwtSecret = resolveSecret(
+  process.env.JWT_SECRET,
+  "development_secret",
+  "JWT_SECRET"
+);
+
 export type SessionPayload = {
   sub: string;
   roles?: string[];
@@ -15,7 +38,7 @@ export type SessionPayload = {
 export const registerAuth: FastifyPluginAsync = fp(async (app) => {
   await app.register(fastifyCookie, {
     hook: "onRequest",
-    secret: process.env.COOKIE_SECRET ?? "vibe_cookie_secret",
+    secret: cookieSecret,
     parseOptions: {
       httpOnly: true,
       sameSite: "strict"
@@ -23,7 +46,7 @@ export const registerAuth: FastifyPluginAsync = fp(async (app) => {
   });
 
   await app.register(fastifyJwt, {
-    secret: process.env.JWT_SECRET ?? "development_secret",
+    secret: jwtSecret,
     cookie: {
       cookieName: TOKEN_COOKIE,
       signed: false

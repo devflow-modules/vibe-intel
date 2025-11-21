@@ -13,7 +13,7 @@ describe("executeAutomationTask", () => {
   it("mapeia goal para foco correto e retorna resultado tipado", async () => {
     const response = await executeAutomationTask({
       goal: "review",
-      files: [{ path: "index.ts", content: "console.log('test');" }]
+      files: [{ path: "index.ts", content: "export const demo = 'test';" }]
     });
 
     expect(response.goal).toBe("review");
