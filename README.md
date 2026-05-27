@@ -1,19 +1,50 @@
-# 🧠 Vibe Intel Monorepo
+# 🧪 Vibe Intel — Experimental Lab
 
-**Vibe Intel** é um monorepo modular que unifica o núcleo de agentes, API pública e utilitários compartilhados da organização **@devflow-modules**.  
-O projeto segue arquitetura escalável, automação total de builds, versionamento semântico e publicação contínua no npm com Trusted Publishing.
+**Vibe Intel** é um projeto experimental da **DevFlow Labs** voltado à exploração de agentes, automações inteligentes, roteamento de skills, APIs modulares e pacotes reutilizáveis em TypeScript.
+
+Este repositório permanece público como **laboratório técnico experimental**, não como produto principal da DevFlow Labs. O objetivo é registrar pesquisa, arquitetura, padrões de automação e possíveis módulos reutilizáveis que podem evoluir futuramente para produtos ou pacotes mais maduros.
 
 ---
 
-## 📦 Estrutura do Monorepo
+## Status
+
+```text
+Experimental / Research Lab
+```
+
+Este projeto pode sofrer mudanças estruturais, renomeações, quebras de API e ajustes de escopo sem compromisso de estabilidade pública.
+
+Para cases de produto mais estáveis da DevFlow Labs, veja:
+
+- https://github.com/devflow-modules/devflow-case-studies
+- https://github.com/devflow-modules/applyflow-case-study
+- https://github.com/devflow-modules/investiga-mais
+
+---
+
+## Objetivo
+
+Explorar uma base modular para agentes e inteligência operacional, com foco em:
+
+- Núcleo de agentes
+- Roteamento de skills
+- API pública modular
+- Tipos e utilitários compartilhados
+- Automação de builds e releases
+- Publicação contínua de pacotes
+- Experimentos com arquitetura orientada a IA
+
+---
+
+## Estrutura do Monorepo
 
 ```bash
 /vibe-intel
   ├── packages/
-  │   ├── api/        # API pública (Fastify 5 + JWT + Rate Limit)
-  │   ├── core/       # Núcleo do agente e roteamento de skills
+  │   ├── api/        # API pública experimental
+  │   ├── core/       # Núcleo de agente e roteamento de skills
   │   └── shared/     # Tipos, clients e utilitários compartilhados
-  ├── .github/workflows/release.yml  # CI/CD de release automático
+  ├── .github/workflows/release.yml
   ├── tsconfig.base.json
   ├── turbo.json
   └── package.json
@@ -21,25 +52,44 @@ O projeto segue arquitetura escalável, automação total de builds, versionamen
 
 ---
 
-## 🚀 Desenvolvimento Local
+## Tecnologias
 
-1. Clonar e instalar dependências
+- TypeScript
+- Node.js
+- Fastify
+- JWT
+- Rate limiting
+- PNPM Workspaces
+- Turborepo
+- GitHub Actions
+- Semantic Release
+- npm Trusted Publishing
+
+---
+
+## Desenvolvimento Local
+
+Clone o repositório:
 
 ```bash
 git clone https://github.com/devflow-modules/vibe-intel.git
 cd vibe-intel
+```
+
+Instale as dependências:
+
+```bash
 pnpm install
 ```
 
-2. Rodar localmente cada módulo
+Rode os módulos localmente:
 
 ```bash
-pnpm dev:api     # inicia servidor Fastify
-pnpm dev:core    # executa agente/skills
-pnpm build       # compila todos os pacotes
+pnpm dev:api
+pnpm dev:core
 ```
 
-3. Build de produção
+Build:
 
 ```bash
 pnpm build
@@ -47,79 +97,81 @@ pnpm build
 
 ---
 
-## 🧩 Publicação Automática (CI/CD)
+## Publicação e Versionamento
 
-A publicação é 100% automatizada via GitHub Actions e Trusted Publishing (sem tokens).
+O projeto utiliza automação de release com Conventional Commits, Semantic Release e GitHub Actions.
 
-Fluxo:
-   1. Commits seguem o padrão Conventional Commits
-   2. `semantic-release` calcula versão automaticamente.
-   3. Gera `CHANGELOG.md`, cria tag, e publica no npm.
+Fluxo previsto:
 
-Cada pacote (`@devflow-modules/vibe-core`, `@devflow-modules/vibe-shared`, etc.) é publicado de forma independente conforme detectadas alterações.
-
----
-
-## 🧠 Tecnologias-Chave
+1. Commits seguem Conventional Commits
+2. Semantic Release calcula a versão
+3. Changelog e tags são gerados automaticamente
+4. Pacotes podem ser publicados via npm Trusted Publishing
 
 ---
 
-## 🧪 Padrão de Commit
+## Padrão de Commit
 
-Cada commit deve seguir o formato:
-
-```makefile
+```text
 <tipo>(escopo): descrição curta
 ```
 
 Exemplos:
 
-```java
-feat(core): adiciona roteador de intenções
-fix(shared): corrige import do OpenAI client
-chore(ci): ajusta pipeline de release
+```text
+feat(core): add intent router
+fix(shared): adjust OpenAI client import
+chore(ci): update release workflow
 ```
 
 ---
 
-## 🔄 Versionamento e Releases
+## Requisitos
 
-Versões são publicadas automaticamente com base nos commits:
-
-`feat`: → minor
-
-`fix`: → patch
-
-`BREAKING CHANGE`: → major
+- Node.js >= 20
+- PNPM >= 10.21.0
+- TypeScript >= 5.9
+- GitHub OIDC Trusted Publisher configurado no npm quando aplicável
 
 ---
 
-## 🧰 Scripts úteis
+## Relação com a DevFlow Labs
 
-| Comando | Descrição | 
-| pnpm build | Compila todos os pacotes |
-| pnpm dev:api | Roda a API localmente |
-| pnpm dev:core | Roda o core localmente |
-| pnpm test | Executa testes (quando adicionados) |
+Dentro da organização, este repositório deve ser lido como **experimental**.
 
----
+Estrutura estratégica:
 
-## 🛠 Requisitos
-
-* Node.js: >= 20
-* PNPM: >= 10.21.0
-* TypeScript: >= 5.9
-* GitHub OIDC Trusted Publisher configurado no npm
+- `devflow` — monorepo privado principal da DevFlow Labs
+- `investiga-mais` — SaaS público/case real
+- `jwt-auth` — módulo reutilizável
+- `applyflow-case-study` — case público específico
+- `devflow-case-studies` — hub público de cases
+- `vibe-intel` — laboratório experimental de agentes e inteligência operacional
 
 ---
 
-## 📄 Licença
+## Roadmap Experimental
 
-Este projeto é mantido sob a licença MIT — livre para uso e modificação, com atribuição.
+- Consolidar contratos internos entre `core`, `api` e `shared`
+- Documentar arquitetura de agentes
+- Criar exemplos de skills
+- Adicionar testes automatizados
+- Avaliar integração com produtos DevFlow Labs
+- Separar módulos que possam virar pacotes públicos estáveis
 
 ---
 
-## 💡 Autor
+## Licença
 
-Gustavo Marques
-Criador e mantenedor do ecossistema DevFlow Modules.
+MIT.
+
+---
+
+## Autor
+
+Criado e mantido por **Gustavo Marques de Lima** como parte do ecossistema **DevFlow Labs**.
+
+- Portfolio: https://devflowlabs.com.br
+- GitHub: https://github.com/gustavomarques00
+- DevFlow Labs GitHub: https://github.com/devflow-modules
+- LinkedIn: https://www.linkedin.com/in/gustavo-marques-00
